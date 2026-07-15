@@ -23,14 +23,9 @@ export async function sendMessage(text: string): Promise<void> {
   });
 }
 
-/**
- * Sends the draft preview: image + EN/TR captions + approve/reject buttons.
- * Button presses arrive at web/app/api/telegram/webhook, which converts them
- * into a repository_dispatch that triggers publish-approved.yml.
- */
-export async function sendDraftPreview(draft: Draft): Promise<void> {
-  const caption = [
-    `<b>Midnight draft — @${IG_HANDLES[draft.account]}</b>`,
+function buildPreviewText(draft: Draft): string {
+  return [
+    `<b>Midnight draft — @${IG_HANDLES[draft.account]} (${draft.format})</b>`,
     `Kategori: ${draft.category} · Yoğunluk: ${draft.intensity} · Pazar: ${draft.market}`,
     "",
     `🇬🇧 ${draft.caption.en}`,
@@ -39,27 +34,68 @@ export async function sendDraftPreview(draft: Draft): Promise<void> {
     "",
     draft.hashtags.map((h) => (h.startsWith("#") ? h : `#${h}`)).join(" "),
   ].join("\n");
+}
 
-  await callTelegram("sendPhoto", {
-    chat_id: requireEnv("TELEGRAM_CHAT_ID"),
-    photo: draft.imageUrl,
-    caption,
-    parse_mode: "HTML",
-    reply_markup: {
-      inline_keyboard: [
-        [
-          { text: "✅ Onayla / Approve", callback_data: `approve:${draft.id}` },
-          { text: "❌ Reddet / Reject", callback_data: `reject:${draft.id}` },
-        ],
+/**
+ * `callback_data` scheme (`approve:<uuid>` / `reject:<uuid>`) is shared across
+ * every format on purpose — web/app/api/telegram/webhook/route.ts parses it
+ * the same way regardless of what kind of draft it points to.
+ */
+function approveRejectKeyboard(draftId: string) {
+  return {
+    inline_keyboard: [
+      [
+        { text: "✅ Onayla / Approve", callback_data: `approve:${draftId}` },
+        { text: "❌ Reddet / Reject", callback_data: `reject:${draftId}` },
       ],
-    },
-  });
-  logger.info("draft preview sent to Telegram", { id: draft.id });
+    ],
+  };
+}
+
+/**
+ * Sends the draft preview (photo, album, or video) with EN/TR captions and
+ * approve/reject buttons. Telegram's sendMediaGroup does not support inline
+ * keyboards, so carousels get their album first and the caption+buttons as a
+ * separate follow-up message.
+ */
+export async function sendDraftPreview(draft: Draft): Promise<void> {
+  const chatId = requireEnv("TELEGRAM_CHAT_ID");
+  const caption = buildPreviewText(draft);
+
+  if (draft.format === "single") {
+    await callTelegram("sendPhoto", {
+      chat_id: chatId,
+      photo: draft.imageUrl,
+      caption,
+      parse_mode: "HTML",
+      reply_markup: approveRejectKeyboard(draft.id),
+    });
+  } else if (draft.format === "carousel") {
+    await callTelegram("sendMediaGroup", {
+      chat_id: chatId,
+      media: draft.imageUrls.map((url) => ({ type: "photo", media: url })),
+    });
+    await callTelegram("sendMessage", {
+      chat_id: chatId,
+      text: caption,
+      parse_mode: "HTML",
+      reply_markup: approveRejectKeyboard(draft.id),
+    });
+  } else {
+    await callTelegram("sendVideo", {
+      chat_id: chatId,
+      video: draft.videoUrl,
+      caption,
+      parse_mode: "HTML",
+      reply_markup: approveRejectKeyboard(draft.id),
+    });
+  }
+  logger.info("draft preview sent to Telegram", { id: draft.id, format: draft.format });
 }
 
 export async function notifyPublished(draft: Draft, permalink?: string): Promise<void> {
   await sendMessage(
-    `✅ Yayınlandı / Published: @${IG_HANDLES[draft.account]} — ${draft.category}\n${permalink ?? ""}`.trim(),
+    `✅ Yayınlandı / Published: @${IG_HANDLES[draft.account]} — ${draft.category} (${draft.format})\n${permalink ?? ""}`.trim(),
   );
 }
 

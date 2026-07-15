@@ -1,6 +1,6 @@
 import { logger } from "../lib/logger.js";
 import { notifyFailure, notifyPublished, sendMessage } from "../notify/telegram.js";
-import { publishImagePost } from "../publishing/instagram.js";
+import { publishDraft } from "../publishing/instagram.js";
 import { loadDraft, saveDraft } from "../storage/drafts.js";
 
 /**
@@ -26,8 +26,10 @@ async function main(): Promise<void> {
     return;
   }
 
-  const { mediaId } = await publishImagePost(draft);
+  const { mediaId } = await publishDraft(draft);
   draft.status = "published";
+  draft.mediaId = mediaId;
+  draft.publishedAt = new Date().toISOString();
   await saveDraft(draft);
   await notifyPublished(draft, `media id: ${mediaId}`);
 }

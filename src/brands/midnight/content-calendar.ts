@@ -1,4 +1,5 @@
-import type { InstagramAccount, MarketCode } from "../../lib/types.js";
+import { pickFormat } from "../../analytics/format-selector.js";
+import type { InstagramAccount, MarketCode, PostFormat } from "../../lib/types.js";
 import { CATEGORIES, INTENSITIES, type Category } from "./categories.js";
 
 export interface ContentSlot {
@@ -6,12 +7,20 @@ export interface ContentSlot {
   market: MarketCode;
   category: Category;
   intensity: (typeof INTENSITIES)[number];
+  format: PostFormat;
 }
 
 /**
- * Deterministic rotation: every 2-hour cycle picks the next combination.
- * Using the cycle index (hours since epoch / 2) keeps the schedule stable
- * across stateless GitHub Actions runs — no database needed.
+ * Deterministic rotation for category/intensity/market/account: every 2-hour
+ * cycle picks the next combination. Using the cycle index (hours since epoch
+ * / 2) keeps the schedule stable across stateless GitHub Actions runs.
+ *
+ * `format` is the one dimension that's NOT deterministic — it's picked by
+ * format-selector.ts (epsilon-greedy against the R2 performance ledger), which
+ * needs real randomness to actually explore. That's safe now because the
+ * ledger in R2 is the shared state that keeps format learning consistent
+ * across stateless runs; category/intensity/market/account rotation doesn't
+ * need that.
  *
  * MVP: single account (@midnight.couplegame), EN+TR markets only.
  * Phase 2 adds @girlsofmidnight; Phase 4 adds RU/ES.
@@ -19,7 +28,7 @@ export interface ContentSlot {
 const ACTIVE_ACCOUNTS: InstagramAccount[] = ["midnightcouplegame"];
 const ACTIVE_MARKETS: MarketCode[] = ["EN", "TR"];
 
-export function pickSlot(now: Date = new Date()): ContentSlot {
+export async function pickSlot(now: Date = new Date()): Promise<ContentSlot> {
   const cycleIndex = Math.floor(now.getTime() / (2 * 60 * 60 * 1000));
 
   const category = CATEGORIES[cycleIndex % CATEGORIES.length]!;
@@ -27,5 +36,7 @@ export function pickSlot(now: Date = new Date()): ContentSlot {
   const market = ACTIVE_MARKETS[cycleIndex % ACTIVE_MARKETS.length]!;
   const account = ACTIVE_ACCOUNTS[cycleIndex % ACTIVE_ACCOUNTS.length]!;
 
-  return { account, market, category, intensity };
+  const format = await pickFormat({ category: category.id, intensity: intensity.id, market, account });
+
+  return { account, market, category, intensity, format };
 }

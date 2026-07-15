@@ -2,6 +2,10 @@ import { GoogleGenAI } from "@google/genai";
 import { optionalEnv, requireEnv } from "../lib/env.js";
 import { logger } from "../lib/logger.js";
 
+function buildImageDirective(imagePrompt: string): string {
+  return `${imagePrompt}\n\nPortrait 4:5 aspect ratio, high quality, no text or watermarks.`;
+}
+
 /**
  * Generates a single feed image via Gemini's image model ("Nano Banana").
  * Instagram feed target is 4:5 (1080×1350) — the aspect ratio is pinned in
@@ -13,7 +17,7 @@ export async function generateImage(imagePrompt: string): Promise<Buffer> {
 
   const response = await ai.models.generateContent({
     model,
-    contents: `${imagePrompt}\n\nPortrait 4:5 aspect ratio, high quality, no text or watermarks.`,
+    contents: buildImageDirective(imagePrompt),
   });
 
   const parts = response.candidates?.[0]?.content?.parts ?? [];
@@ -24,4 +28,17 @@ export async function generateImage(imagePrompt: string): Promise<Buffer> {
     }
   }
   throw new Error("Image model returned no image data");
+}
+
+/**
+ * Generates carousel slide images sequentially (not in parallel) — the Gemini
+ * image model has per-minute rate limits that a 3-5-way burst can trip, and
+ * a failed slide 4 of 5 would waste the slides already generated anyway.
+ */
+export async function generateCarouselImages(imagePrompts: string[]): Promise<Buffer[]> {
+  const images: Buffer[] = [];
+  for (const prompt of imagePrompts) {
+    images.push(await generateImage(prompt));
+  }
+  return images;
 }

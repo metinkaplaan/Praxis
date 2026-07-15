@@ -3,7 +3,11 @@ name: content-cycle
 on:
   schedule:
     - cron: "0 */2 * * *" # every 2 hours; GitHub may delay a few minutes, which is fine
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      force_format:
+        description: "Override format selection (single|carousel|reel) — leave empty for normal rotation"
+        required: false
 
 concurrency:
   group: content-cycle
@@ -12,7 +16,7 @@ concurrency:
 jobs:
   generate:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25 # Veo generation + polling and multi-slide carousel generation both happen here
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -22,6 +26,7 @@ jobs:
       - run: npm ci
       - run: npm run content-cycle
         env:
+          FORCE_FORMAT: ${{ inputs.force_format }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}

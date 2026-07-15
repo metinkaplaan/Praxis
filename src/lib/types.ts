@@ -17,13 +17,20 @@ export type MarketCode = "EN" | "TR" | "RU" | "ES";
  */
 export type InstagramAccount = "midnightcouplegame" | "girlsofmidnight";
 
-export interface GeneratedPost {
-  caption: BilingualCopy;
-  hashtags: string[];
+export type PostFormat = "single" | "carousel" | "reel";
+
+export interface CarouselSlide {
+  order: number;
+  role: "hook" | "build" | "payoff" | "cta";
   imagePrompt: string;
 }
 
-export interface Draft {
+export type GeneratedPost =
+  | { format: "single"; caption: BilingualCopy; hashtags: string[]; imagePrompt: string }
+  | { format: "carousel"; caption: BilingualCopy; hashtags: string[]; slides: CarouselSlide[] }
+  | { format: "reel"; caption: BilingualCopy; hashtags: string[]; videoPrompt: string };
+
+interface DraftBase {
   id: string;
   createdAt: string;
   account: InstagramAccount;
@@ -32,7 +39,15 @@ export interface Draft {
   intensity: string;
   caption: BilingualCopy;
   hashtags: string[];
-  /** Public R2 URL — the Graph API fetches media from here. */
-  imageUrl: string;
   status: "pending_approval" | "published" | "rejected";
+  /** Filled in by publish-draft.ts once the Graph API confirms publication. */
+  mediaId?: string;
+  publishedAt?: string;
+  /** Filled in by collect-insights once metrics have been recorded. */
+  insightsCollectedAt?: string;
 }
+
+export type Draft =
+  | (DraftBase & { format: "single"; imageUrl: string })
+  | (DraftBase & { format: "carousel"; imageUrls: string[] })
+  | (DraftBase & { format: "reel"; videoUrl: string });

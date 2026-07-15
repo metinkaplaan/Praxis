@@ -1,4 +1,4 @@
-import { PutObjectCommand, GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { PutObjectCommand, GetObjectCommand, ListObjectsV2Command, S3Client } from "@aws-sdk/client-s3";
 import { requireEnv } from "../lib/env.js";
 import { logger } from "../lib/logger.js";
 
@@ -44,4 +44,34 @@ export async function getObjectText(key: string): Promise<string> {
     new GetObjectCommand({ Bucket: requireEnv("R2_BUCKET"), Key: key }),
   );
   return (await res.Body?.transformToString()) ?? "";
+}
+
+/** Like getObjectText, but returns null instead of throwing when the key doesn't exist. */
+export async function getObjectTextOrNull(key: string): Promise<string | null> {
+  try {
+    return await getObjectText(key);
+  } catch (error) {
+    const name = (error as { name?: string })?.name;
+    if (name === "NoSuchKey" || name === "NotFound") return null;
+    throw error;
+  }
+}
+
+export async function listObjects(prefix: string): Promise<string[]> {
+  const keys: string[] = [];
+  let continuationToken: string | undefined;
+  do {
+    const res = await r2().send(
+      new ListObjectsV2Command({
+        Bucket: requireEnv("R2_BUCKET"),
+        Prefix: prefix,
+        ContinuationToken: continuationToken,
+      }),
+    );
+    for (const obj of res.Contents ?? []) {
+      if (obj.Key) keys.push(obj.Key);
+    }
+    continuationToken = res.NextContinuationToken;
+  } while (continuationToken);
+  return keys;
 }
