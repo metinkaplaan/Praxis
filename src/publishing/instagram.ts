@@ -28,6 +28,31 @@ async function graphPost(
   return json;
 }
 
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/**
+ * Instagram processes the container asynchronously after fetching the media
+ * from R2 — publishing immediately races that and fails with error 9007
+ * ("Media is not ready for publishing"). Poll status_code until FINISHED.
+ */
+async function waitForContainer(creationId: string, token: string): Promise<void> {
+  for (let attempt = 1; attempt <= 20; attempt++) {
+    const url = new URL(`${GRAPH}/${creationId}`);
+    url.searchParams.set("fields", "status_code");
+    url.searchParams.set("access_token", token);
+    const res = await fetch(url);
+    const json = (await res.json()) as { status_code?: string };
+    const status = json.status_code ?? "UNKNOWN";
+    if (status === "FINISHED") return;
+    if (status === "ERROR" || status === "EXPIRED") {
+      throw new Error(`Media container ${status}: ${JSON.stringify(json)}`);
+    }
+    logger.info("waiting for media container", { attempt, status });
+    await sleep(3000);
+  }
+  throw new Error("Media container not ready after 60s");
+}
+
 /**
  * Instagram Content Publishing: two-step server-to-server flow.
  * 1) create a media container pointing at a PUBLIC image URL (R2),
@@ -52,6 +77,8 @@ export async function publishImagePost(draft: Draft): Promise<{ mediaId: string 
   });
   const creationId = String(container.id);
   logger.info("media container created", { creationId });
+
+  await waitForContainer(creationId, token);
 
   const published = await graphPost(`${userId}/media_publish`, {
     creation_id: creationId,
