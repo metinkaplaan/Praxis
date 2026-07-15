@@ -10,7 +10,12 @@ export interface BilingualCopy {
 
 export type MarketCode = "EN" | "TR" | "RU" | "ES";
 
-export type InstagramAccount = "joinmidnight" | "girlsofmidnight";
+/**
+ * Env-safe account keys (no dots — they become secret-name suffixes, e.g.
+ * IG_TOKEN_MIDNIGHTCOUPLEGAME). Real IG handles live in IG_HANDLES in
+ * brands/midnight/brand.ts.
+ */
+export type InstagramAccount = "midnightcouplegame" | "girlsofmidnight";
 
 export interface GeneratedPost {
   caption: BilingualCopy;

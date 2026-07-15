@@ -13,10 +13,10 @@ export interface ContentSlot {
  * Using the cycle index (hours since epoch / 2) keeps the schedule stable
  * across stateless GitHub Actions runs — no database needed.
  *
- * MVP: single account (@joinmidnight), EN+TR markets only.
+ * MVP: single account (@midnight.couplegame), EN+TR markets only.
  * Phase 2 adds @girlsofmidnight; Phase 4 adds RU/ES.
  */
-const ACTIVE_ACCOUNTS: InstagramAccount[] = ["joinmidnight"];
+const ACTIVE_ACCOUNTS: InstagramAccount[] = ["midnightcouplegame"];
 const ACTIVE_MARKETS: MarketCode[] = ["EN", "TR"];
 
 export function pickSlot(now: Date = new Date()): ContentSlot {

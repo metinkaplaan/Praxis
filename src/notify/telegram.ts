@@ -1,3 +1,4 @@
+import { IG_HANDLES } from "../brands/midnight/brand.js";
 import { requireEnv } from "../lib/env.js";
 import { logger } from "../lib/logger.js";
 import type { Draft } from "../lib/types.js";
@@ -29,7 +30,7 @@ export async function sendMessage(text: string): Promise<void> {
  */
 export async function sendDraftPreview(draft: Draft): Promise<void> {
   const caption = [
-    `<b>Midnight draft — @${draft.account}</b>`,
+    `<b>Midnight draft — @${IG_HANDLES[draft.account]}</b>`,
     `Kategori: ${draft.category} · Yoğunluk: ${draft.intensity} · Pazar: ${draft.market}`,
     "",
     `🇬🇧 ${draft.caption.en}`,
@@ -58,7 +59,7 @@ export async function sendDraftPreview(draft: Draft): Promise<void> {
 
 export async function notifyPublished(draft: Draft, permalink?: string): Promise<void> {
   await sendMessage(
-    `✅ Yayınlandı / Published: @${draft.account} — ${draft.category}\n${permalink ?? ""}`.trim(),
+    `✅ Yayınlandı / Published: @${IG_HANDLES[draft.account]} — ${draft.category}\n${permalink ?? ""}`.trim(),
   );
 }
 

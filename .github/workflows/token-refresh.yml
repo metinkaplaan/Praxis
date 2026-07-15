@@ -18,7 +18,7 @@ jobs:
       - run: npm ci
       - run: npm run refresh-tokens
         env:
-          IG_TOKEN_JOINMIDNIGHT: ${{ secrets.IG_TOKEN_JOINMIDNIGHT }}
+          IG_TOKEN_MIDNIGHTCOUPLEGAME: ${{ secrets.IG_TOKEN_MIDNIGHTCOUPLEGAME }}
           GH_PAT_SECRETS_WRITE: ${{ secrets.GH_PAT_SECRETS_WRITE }}
           GH_REPO: ${{ github.repository }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}

@@ -1,6 +1,6 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { z } from "zod";
-import { MIDNIGHT_BRAND } from "../brands/midnight/brand.js";
+import { IG_HANDLES, MIDNIGHT_BRAND } from "../brands/midnight/brand.js";
 import type { ContentSlot } from "../brands/midnight/content-calendar.js";
 import { optionalEnv, requireEnv } from "../lib/env.js";
 import { logger } from "../lib/logger.js";
@@ -28,7 +28,7 @@ export async function generatePost(slot: ContentSlot): Promise<GeneratedPost> {
     `You write Instagram captions for "${MIDNIGHT_BRAND.name}", a couples' game app.`,
     `Brand slogan: "${MIDNIGHT_BRAND.slogan.en}" / "${MIDNIGHT_BRAND.slogan.tr}".`,
     `Tonight's theme: ${slot.category.theme.en} (category "${slot.category.id}", intensity "${slot.intensity.label.en}").`,
-    `Primary market: ${slot.market}. Account: @${slot.account}.`,
+    `Primary market: ${slot.market}. Account: @${IG_HANDLES[slot.account]}.`,
     "",
     "Rules:",
     "- Tasteful and suggestive, never explicit. Must comply with Instagram content policies.",

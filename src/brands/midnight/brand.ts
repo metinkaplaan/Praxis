@@ -1,4 +1,10 @@
-import type { BilingualCopy } from "../../lib/types.js";
+import type { BilingualCopy, InstagramAccount } from "../../lib/types.js";
+
+/** Real Instagram handles, keyed by the env-safe account keys. */
+export const IG_HANDLES: Record<InstagramAccount, string> = {
+  midnightcouplegame: "midnight.couplegame",
+  girlsofmidnight: "girlsofmidnight",
+};
 
 export const MIDNIGHT_BRAND = {
   name: "Midnight",

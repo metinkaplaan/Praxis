@@ -16,12 +16,12 @@ Bu adımlar senin hesaplarında yapılır, kod tarafı hazır. Sırayla ilerle; 
 
 ## 2. Meta App — Instagram API
 
-1. `@joinmidnight` Instagram hesabını **Professional (Business veya Creator)** hesaba çevir (Instagram ayarları → Hesap türü)
+1. `@midnight.couplegame` Instagram hesabını **Professional (Business veya Creator)** hesaba çevir (Instagram ayarları → Hesap türü)
 2. developers.facebook.com → Create App → use case olarak **"Instagram API with Instagram Login"** seç (Facebook Page bağlamak GEREKMEZ)
 3. App ayarlarında:
    - Privacy Policy URL: midnight-privacy sayfanın canlı URL'i
    - **Valid OAuth Redirect URIs**: `WEB_URL/api/auth/instagram/callback`
-4. App Roles → Instagram Testers → `@joinmidnight` hesabını ekle ve Instagram tarafından daveti kabul et (App Review'a gerek yok, Development Mode yeterli)
+4. App Roles → Instagram Testers → `@midnight.couplegame` hesabını ekle ve Instagram tarafından daveti kabul et (App Review'a gerek yok, Development Mode yeterli)
 5. App ID ve App Secret'ı → Vercel env'e (`META_APP_ID`, `META_APP_SECRET`)
 
 ## 3. Instagram token'ı al (tek seferlik)
@@ -30,10 +30,10 @@ Bu adımlar senin hesaplarında yapılır, kod tarafı hazır. Sırayla ilerle; 
    ```
    https://www.instagram.com/oauth/authorize?client_id=APP_ID&redirect_uri=WEB_URL/api/auth/instagram/callback&scope=instagram_business_basic,instagram_business_content_publish&response_type=code
    ```
-2. `@joinmidnight` ile giriş yap, izin ver → callback sayfası sana **IG_USER_ID** ve **60 günlük token** gösterecek
+2. `@midnight.couplegame` ile giriş yap, izin ver → callback sayfası sana **IG_USER_ID** ve **60 günlük token** gösterecek
 3. Bunları GitHub → Praxis repo → Settings → Secrets and variables → Actions'a kaydet:
-   - `IG_USER_ID_JOINMIDNIGHT`
-   - `IG_TOKEN_JOINMIDNIGHT`
+   - `IG_USER_ID_MIDNIGHTCOUPLEGAME`
+   - `IG_TOKEN_MIDNIGHTCOUPLEGAME`
 
 ## 4. Telegram bot
 
@@ -67,5 +67,5 @@ GitHub → Settings → Developer settings → Fine-grained tokens → Generate 
 
 1. Repo → Actions → **content-cycle** → Run workflow (manuel tetik)
 2. Telegram'a görsel + EN/TR caption + Onayla/Reddet butonlu bir önizleme düşmeli
-3. "Onayla"ya bas → **publish-approved** workflow'u tetiklenmeli → `@joinmidnight` hesabında gönderi yayınlanmalı
+3. "Onayla"ya bas → **publish-approved** workflow'u tetiklenmeli → `@midnight.couplegame` hesabında gönderi yayınlanmalı
 4. Repo → Settings → Security → **Secret scanning + Push protection**'ı aç

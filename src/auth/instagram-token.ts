@@ -8,7 +8,7 @@ import { notifyFailure, sendMessage } from "../notify/telegram.js";
  * GitHub Actions Secrets. Run daily by token-refresh.yml — refreshing well
  * before expiry means a couple of failed days never break publishing.
  */
-const ACCOUNTS = ["JOINMIDNIGHT"] as const; // Phase 2: add "GIRLSOFMIDNIGHT"
+const ACCOUNTS = ["MIDNIGHTCOUPLEGAME"] as const; // Phase 2: add "GIRLSOFMIDNIGHT"
 
 async function refreshToken(current: string): Promise<string> {
   const url = new URL("https://graph.instagram.com/refresh_access_token");
