@@ -1,6 +1,6 @@
 import { logger } from "../lib/logger.js";
 import type { Draft } from "../lib/types.js";
-import { getObjectText, uploadPublic } from "./r2.js";
+import { getObjectText, listObjects, uploadPublic } from "./r2.js";
 
 /**
  * Drafts awaiting approval are stored as JSON manifests in R2 under
@@ -16,4 +16,17 @@ export async function loadDraft(id: string): Promise<Draft> {
   const text = await getObjectText(`drafts/${id}.json`);
   if (!text) throw new Error(`Draft not found: ${id}`);
   return JSON.parse(text) as Draft;
+}
+
+/**
+ * Lists every draft ever written. Fine at MVP volume (a few posts/day); if
+ * this ever gets slow, switch to a maintained `drafts/index.json` manifest
+ * instead of listing the whole prefix.
+ */
+export async function loadAllDrafts(): Promise<Draft[]> {
+  const keys = await listObjects("drafts/");
+  const drafts = await Promise.all(
+    keys.map(async (key) => JSON.parse(await getObjectText(key)) as Draft),
+  );
+  return drafts;
 }
