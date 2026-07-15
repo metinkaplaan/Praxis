@@ -49,13 +49,22 @@ export async function POST(req: NextRequest) {
     },
   );
 
+  if (!ghRes.ok) {
+    console.error("repository_dispatch failed", {
+      status: ghRes.status,
+      repo: process.env.GH_REPO,
+      hasPat: Boolean(process.env.GH_PAT_DISPATCH),
+      body: (await ghRes.text()).slice(0, 500),
+    });
+  }
+
   await answerCallback(
     cb.id,
     ghRes.ok
       ? action === "approve"
         ? "✅ Yayın kuyruğa alındı / queued for publishing"
         : "🗑 Reddedildi / rejected"
-      : "⚠️ GitHub tetiklenemedi / dispatch failed",
+      : `⚠️ GitHub tetiklenemedi / dispatch failed (HTTP ${ghRes.status})`,
   );
   return NextResponse.json({ ok: true });
 }
