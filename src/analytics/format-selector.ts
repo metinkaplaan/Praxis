@@ -9,14 +9,17 @@ export interface FormatSelectionContext {
   account: InstagramAccount;
 }
 
-const FORMATS: PostFormat[] = ["single", "carousel", "reel"];
-
 /**
- * Bootstrap weights used until the performance ledger has enough samples to
- * trust. Weighted toward "single" — it's the cheapest/fastest to produce and
- * the only format that's been proven end-to-end so far.
+ * "single" is intentionally excluded from rotation — the operator decided
+ * plain single-photo posts are retired; every post is now a carousel or a
+ * reel. `PostFormat` (in lib/types.ts) still includes "single" because past
+ * published drafts have that format and publishing/insights code needs to
+ * keep handling them — it's just never selected for new posts.
  */
-const DEFAULT_WEIGHTS: Record<PostFormat, number> = { single: 0.7, carousel: 0.25, reel: 0.05 };
+const FORMATS: PostFormat[] = ["carousel", "reel"];
+
+/** Bootstrap weights used until the performance ledger has enough samples to trust. */
+const DEFAULT_WEIGHTS: Record<PostFormat, number> = { single: 0, carousel: 0.6, reel: 0.4 };
 
 function weightedPick(weights: Record<PostFormat, number>): PostFormat {
   const total = FORMATS.reduce((sum, f) => sum + weights[f], 0);
