@@ -41,6 +41,27 @@ const reelSchema = z.object({
   videoPrompt: z.string().min(1),
 });
 
+/**
+ * Generic aesthetic buzzwords ("dramatic lighting, elegant") reliably produce
+ * the glossy, symmetrical, slightly plastic look that reads as obviously
+ * AI-generated — and specifically fails to capture genuine chemistry/passion
+ * between two people, which was exactly the operator's complaint. Forcing
+ * one concrete, small, imperfect physical/emotional detail per prompt is what
+ * actually breaks that pattern; this is appended to every imagePrompt/
+ * videoPrompt instruction, not to the caption instructions.
+ */
+const REALISM_DIRECTIVE = [
+  "Visual direction — avoid the generic 'AI-generated' look:",
+  "- Do not rely on aesthetic buzzwords alone. Specify ONE concrete, small, imperfect physical or emotional",
+  "  detail a real photograph would catch: a specific hand placement, an asymmetric pose, a genuine facial",
+  "  micro-expression, uneven breathing, a wrinkle in fabric, a stray hair, weight shifted unevenly.",
+  "- Prefer candid/documentary framing (a caught moment) over posed/symmetrical/magazine-cover framing.",
+  "- Real couples are not perfectly symmetrical or glossy — describe a slightly imperfect, in-the-moment",
+  "  instant, not a staged tableau.",
+  "- Where it fits the mood, reference real photographic qualities (35mm film grain, natural light falloff,",
+  "  slight motion blur) rather than smooth, over-rendered CGI-like polish.",
+].join("\n");
+
 async function buildSharedContext(slot: ContentSlot): Promise<string[]> {
   const growthNotes = await loadGrowthNotes();
   const lines = [
@@ -81,6 +102,8 @@ export async function generatePost(slot: ContentSlot): Promise<GeneratedPost> {
       "",
       "Produce `imagePrompt`: a single-image art direction for this post, consistent with:",
       `"${MIDNIGHT_BRAND.visualIdentity}" and "${slot.category.visualHint}".`,
+      "",
+      REALISM_DIRECTIVE,
     ].join("\n");
 
     const response = await ai.models.generateContent({
@@ -119,6 +142,9 @@ export async function generatePost(slot: ContentSlot): Promise<GeneratedPost> {
       "Build a micro-narrative across slides: hook grabs attention, build develops it, payoff delivers the",
       "insight/punchline, cta is a final slide encouraging a save/share/follow.",
       'The caption should explicitly encourage swiping (e.g. "Sona kadar kaydır" / "Swipe to the end").',
+      "",
+      REALISM_DIRECTIVE,
+      "Apply this to EVERY slide's imagePrompt individually, not just the overall series.",
     ].join("\n");
 
     const response = await ai.models.generateContent({
@@ -167,6 +193,10 @@ export async function generatePost(slot: ContentSlot): Promise<GeneratedPost> {
     `"${MIDNIGHT_BRAND.visualIdentity}" and "${slot.category.visualHint}".`,
     "Describe what happens in the first 1-2 seconds explicitly — that's the hook that decides whether",
     "someone keeps watching. Keep the caption energetic and short compared to a feed post.",
+    "",
+    REALISM_DIRECTIVE,
+    "For video specifically: describe natural, slightly imperfect human motion (weight shifting, a real",
+    "exhale, hair moving with the body) rather than smooth/floating motion, which is what reads as synthetic.",
   ].join("\n");
 
   const response = await ai.models.generateContent({

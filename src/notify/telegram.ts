@@ -54,42 +54,37 @@ function approveRejectKeyboard(draftId: string) {
 
 /**
  * Sends the draft preview (photo, album, or video) with EN/TR captions and
- * approve/reject buttons. Telegram's sendMediaGroup does not support inline
- * keyboards, so carousels get their album first and the caption+buttons as a
- * separate follow-up message.
+ * approve/reject buttons. Media captions (sendPhoto/sendVideo/sendMediaGroup)
+ * are capped by Telegram at 1024 chars — our growth-aware captions (hook +
+ * CTA + hashtags) routinely exceed that. So media always goes out WITHOUT a
+ * caption, followed by a separate sendMessage (4096-char limit) carrying the
+ * full text and the buttons. sendMediaGroup never supported inline keyboards
+ * anyway, so this also makes all three formats behave the same way.
  */
 export async function sendDraftPreview(draft: Draft): Promise<void> {
   const chatId = requireEnv("TELEGRAM_CHAT_ID");
   const caption = buildPreviewText(draft);
 
   if (draft.format === "single") {
-    await callTelegram("sendPhoto", {
-      chat_id: chatId,
-      photo: draft.imageUrl,
-      caption,
-      parse_mode: "HTML",
-      reply_markup: approveRejectKeyboard(draft.id),
-    });
+    await callTelegram("sendPhoto", { chat_id: chatId, photo: draft.imageUrl });
   } else if (draft.format === "carousel") {
     await callTelegram("sendMediaGroup", {
       chat_id: chatId,
       media: draft.imageUrls.map((url) => ({ type: "photo", media: url })),
     });
-    await callTelegram("sendMessage", {
-      chat_id: chatId,
-      text: caption,
-      parse_mode: "HTML",
-      reply_markup: approveRejectKeyboard(draft.id),
-    });
   } else {
-    await callTelegram("sendVideo", {
-      chat_id: chatId,
-      video: draft.videoUrl,
-      caption,
-      parse_mode: "HTML",
-      reply_markup: approveRejectKeyboard(draft.id),
-    });
+    await callTelegram("sendVideo", { chat_id: chatId, video: draft.videoUrl });
   }
+
+  // Telegram's sendMessage text limit is 4096 chars — truncate defensively
+  // rather than let an unusually long caption take down the whole cycle.
+  const text = caption.length > 4096 ? `${caption.slice(0, 4090)}\n[…]` : caption;
+  await callTelegram("sendMessage", {
+    chat_id: chatId,
+    text,
+    parse_mode: "HTML",
+    reply_markup: approveRejectKeyboard(draft.id),
+  });
   logger.info("draft preview sent to Telegram", { id: draft.id, format: draft.format });
 }
 
