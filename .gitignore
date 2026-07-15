@@ -1,0 +1,24 @@
+# Secrets — never commit credentials of any kind
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.keystore
+*.jks
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.next/
+out/
+
+# Vercel
+.vercel/
+
+# Local artifacts
+*.log
+.DS_Store
+generated/

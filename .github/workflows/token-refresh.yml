@@ -1,0 +1,25 @@
+name: token-refresh
+
+on:
+  schedule:
+    - cron: "30 3 * * *" # daily — refreshing long before the 60-day expiry
+  workflow_dispatch: {}
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run refresh-tokens
+        env:
+          IG_TOKEN_JOINMIDNIGHT: ${{ secrets.IG_TOKEN_JOINMIDNIGHT }}
+          GH_PAT_SECRETS_WRITE: ${{ secrets.GH_PAT_SECRETS_WRITE }}
+          GH_REPO: ${{ github.repository }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}

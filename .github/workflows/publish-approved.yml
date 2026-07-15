@@ -1,0 +1,42 @@
+name: publish-approved
+
+on:
+  repository_dispatch:
+    types: [publish-draft]
+  workflow_dispatch:
+    inputs:
+      draft_id:
+        description: "Draft ID to publish"
+        required: true
+      action:
+        description: "approve or reject"
+        default: "approve"
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run publish-draft
+        env:
+          DRAFT_ID: ${{ github.event.client_payload.draft_id || inputs.draft_id }}
+          ACTION: ${{ github.event.client_payload.action || inputs.action }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_PUBLIC_BASE_URL: ${{ secrets.R2_PUBLIC_BASE_URL }}
+          IG_TOKEN_JOINMIDNIGHT: ${{ secrets.IG_TOKEN_JOINMIDNIGHT }}
+          IG_USER_ID_JOINMIDNIGHT: ${{ secrets.IG_USER_ID_JOINMIDNIGHT }}
