@@ -9,9 +9,21 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
  * this script answers that before we build the full video.ts pipeline.
  * Not part of the production orchestrator; safe to delete after use.
  */
+async function findVeoModel(ai: GoogleGenAI): Promise<string> {
+  if (process.env.VEO_MODEL) return process.env.VEO_MODEL;
+  const pager = await ai.models.list();
+  const veoModels: string[] = [];
+  for await (const m of pager) {
+    if (m.name?.toLowerCase().includes("veo")) veoModels.push(m.name);
+  }
+  console.log("Available Veo models:", JSON.stringify(veoModels));
+  if (veoModels.length === 0) throw new Error("No Veo models found in ListModels response");
+  return veoModels[0]!.replace(/^models\//, "");
+}
+
 async function main(): Promise<void> {
   const ai = new GoogleGenAI({ apiKey: requireEnv("GEMINI_API_KEY") });
-  const model = process.env.VEO_MODEL || "veo-3.0-generate-001";
+  const model = await findVeoModel(ai);
   console.log(`Requesting video generation with model: ${model}`);
 
   const start = Date.now();
