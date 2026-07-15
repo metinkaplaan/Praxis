@@ -1,5 +1,6 @@
 # Praxis — Agent Instructions
 
+- **Couple depictions (hard requirement, no exceptions):** whenever generated content shows a couple/two people, it is always exactly one man and one woman — never a same-sex pairing. This is enforced in `src/generation/captions.ts` (`buildSharedContext`'s general rules) by requiring every `imagePrompt`/`videoPrompt` to state genders explicitly. Do not soften or remove this rule.
 - **Bilingual rule (hard requirement):** any user-facing English copy produced anywhere in this codebase (captions, Reddit posts, store descriptions, subtitles) must always carry a Turkish translation. Use `BilingualCopy` from `src/lib/types.ts` — never a bare English string.
 - **Secrets:** never write credentials into tracked files. Local dev uses `.env` (gitignored); CI uses GitHub Actions Secrets. If you spot a hardcoded secret, flag it immediately.
 - **Scope discipline:** MVP is Midnight brand + Instagram only. `reddit.ts` / `tiktok.ts` / other brands are placeholders for later phases — don't flesh them out unless asked.
