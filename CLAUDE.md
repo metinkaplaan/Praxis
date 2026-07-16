@@ -1,5 +1,7 @@
 # Praxis — Agent Instructions
 
+- **Constitution first:** for any vision/scope/feature decision, read `knowledge/PRAXIS-CONSTITUTION.md` before deciding — the filter is "does this make the Midnight app grow faster?"; if not, don't build it.
+- **Knowledge hub contract:** `knowledge/instagram/*.md` files are operator-fed — new Instagram knowledge is a markdown commit to the right file, never a code change. Each file's `## Cheat Sheet` section (~150-word budget) is injected into EVERY generation prompt via `src/lib/knowledge.ts`, so only actionable rules belong there; detail sections below it are reference-only. `hooks.md` H2 ids must match `HOOK_CATEGORIES` in `src/lib/types.ts`.
 - **Couple depictions (hard requirement, no exceptions):** whenever generated content shows a couple/two people, it is always exactly one man and one woman — never a same-sex pairing. This is enforced in `src/generation/captions.ts` (`buildSharedContext`'s general rules) by requiring every `imagePrompt`/`videoPrompt` to state genders explicitly. Do not soften or remove this rule.
 - **Bilingual rule (hard requirement):** any user-facing English copy produced anywhere in this codebase (captions, Reddit posts, store descriptions, subtitles) must always carry a Turkish translation. Use `BilingualCopy` from `src/lib/types.ts` — never a bare English string.
 - **Secrets:** never write credentials into tracked files. Local dev uses `.env` (gitignored); CI uses GitHub Actions Secrets. If you spot a hardcoded secret, flag it immediately.

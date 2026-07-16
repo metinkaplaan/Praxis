@@ -19,6 +19,37 @@ export type InstagramAccount = "midnightcouplegame" | "girlsofmidnight";
 
 export type PostFormat = "single" | "carousel" | "reel";
 
+/**
+ * Psychological hook categories — single source of truth shared by the zod
+ * schemas, the Gemini responseSchema enums, and the H2 section ids in
+ * knowledge/instagram/hooks.md (the loader warns when they drift apart).
+ */
+export const HOOK_CATEGORIES = [
+  "curiosity",
+  "fear",
+  "humor",
+  "surprise",
+  "authority",
+  "story",
+  "numbers",
+  "conflict",
+  "forbidden",
+  "reverse",
+] as const;
+export type HookCategory = (typeof HOOK_CATEGORIES)[number];
+
+/** CTA types — mirrors knowledge/instagram/cta-bank.md. */
+export const CTA_TYPES = [
+  "save",
+  "share",
+  "comment",
+  "send_to_partner",
+  "profile_visit",
+  "dm",
+  "follow",
+] as const;
+export type CtaType = (typeof CTA_TYPES)[number];
+
 export interface CarouselSlide {
   order: number;
   role: "hook" | "build" | "payoff" | "cta";

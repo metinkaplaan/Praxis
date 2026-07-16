@@ -4,6 +4,7 @@ import { IG_HANDLES, MIDNIGHT_BRAND } from "../brands/midnight/brand.js";
 import type { ContentSlot } from "../brands/midnight/content-calendar.js";
 import { optionalEnv, requireEnv } from "../lib/env.js";
 import { loadGrowthNotes } from "../lib/growth-notes.js";
+import { buildKnowledgeBlock } from "../lib/knowledge.js";
 import { logger } from "../lib/logger.js";
 import type { GeneratedPost } from "../lib/types.js";
 
@@ -64,8 +65,10 @@ const REALISM_DIRECTIVE = [
 
 async function buildSharedContext(slot: ContentSlot): Promise<string[]> {
   const growthNotes = await loadGrowthNotes();
+  const knowledge = await buildKnowledgeBlock(slot.format);
   const lines = [
     `You write Instagram content for "${MIDNIGHT_BRAND.name}", a couples' game app.`,
+    "Mission: every post exists to grow the Midnight app — follower growth, profile visits, app installs. Optimize for saves and shares.",
     `Brand slogan: "${MIDNIGHT_BRAND.slogan.en}" / "${MIDNIGHT_BRAND.slogan.tr}".`,
     `Tonight's theme: ${slot.category.theme.en} (category "${slot.category.id}", intensity "${slot.intensity.label.en}").`,
     `Primary market: ${slot.market}. Account: @${IG_HANDLES[slot.account]}. Format: ${slot.format}.`,
@@ -85,6 +88,9 @@ async function buildSharedContext(slot: ContentSlot): Promise<string[]> {
     "- End with one clear, low-friction call to action (not multiple asks).",
     "- Hashtags: 2-3 broad/high-volume + 4-6 niche/specific — mix English and Turkish, no banned or spammy tags.",
   ];
+  if (knowledge) {
+    lines.push("", "Instagram playbook (apply these):", knowledge);
+  }
   if (growthNotes) {
     lines.push(
       "",
