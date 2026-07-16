@@ -21,7 +21,7 @@ export interface GeneratedVideoResult {
 
 export async function generateVideo(videoPrompt: string): Promise<GeneratedVideoResult> {
   const ai = new GoogleGenAI({ apiKey: requireEnv("GEMINI_API_KEY") });
-  const model = optionalEnv("VEO_MODEL", "veo-3.1-generate-preview");
+  const model = optionalEnv("VEO_MODEL", "veo-3.1-fast-generate-preview");
   // IG target is 1080x1920; if the model/region rejects 9:16+1080p, set
   // VEO_RESOLUTION=720p (IG upscales fine). fps is deliberately NOT set —
   // Veo outputs ~24fps which Instagram accepts (23-60fps).

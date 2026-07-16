@@ -10,16 +10,16 @@
 |---|---|---|---|
 | Caption/metin üretimi | `gemini-2.5-flash` | $0.30 / 1M girdi token, $2.50 / 1M çıktı token | Tek üretim ~1-1.5K token (knowledge+growth-notes dahil) → **~$0.001-0.003** |
 | Görsel üretimi | `gemini-2.5-flash-image` | $30 / 1M çıktı token (~1290 token/görsel, ≤1024px) | **~$0.039/görsel** |
-| Video üretimi | `veo-3.1-generate-preview` (mevcut config) | **$0.40 / saniye** (ses dahil) | Bizim ayarımız 8sn → **~$3.20/video** — sistemin ezici çoğunluk maliyeti burada |
+| Video üretimi | `veo-3.1-fast-generate-preview` (mevcut config) | **$0.15 / saniye** (ses dahil) | Bizim ayarımız 8sn → **~$1.20/video** — sistemin ezici çoğunluk maliyeti hâlâ burada, ama Standard'a (`veo-3.1-generate-preview`, $0.40/sn) göre ~%63 daha düşük |
 
 ## Gönderi Başına Maliyet
 
 | Format | İçerik | Tahmini maliyet |
 |---|---|---|
 | Carousel (3-5 slayt, ort. 4) | 1 caption + 4 görsel | **~$0.16** |
-| Reel (8sn, `VEO_DURATION_SEC=8`) | 1 caption + 1 video | **~$3.21** |
+| Reel (8sn, `VEO_DURATION_SEC=8`) | 1 caption + 1 video | **~$1.20** |
 
-**Reel, carousel'den ~20 kat daha pahalı.**
+**Reel, carousel'den ~7.5 kat daha pahalı** (Veo Fast'e geçmeden önce ~20 kattı).
 
 ## ✅ Düzeltildi: Cold-start artık %60/%40, saf %50/%50 değil
 
@@ -37,15 +37,18 @@ davranış, değişmedi) devreye girecek.
 
 | Senaryo | Reel oranı | Gönderi başına ort. maliyet | Günlük | Aylık |
 |---|---|---|---|---|
-| **Şu anki davranış (düzeltme sonrası, cold-start)** | %40 | $1.376 | $16.51 | **~$495** |
-| Reel %15'e düşürülürse | %15 | $0.617 | $7.40 | ~$222 |
+| **Şu anki davranış (Veo Fast + cold-start %60/%40)** | %40 | $0.576 | $6.91 | **~$207** |
+| Reel %15'e düşürülürse | %15 | $0.316 | $3.79 | ~$114 |
 | Sadece carousel (reel geçici kapalı) | %0 | $0.16 | $1.92 | ~$58 |
+
+Karşılaştırma: Veo Fast'e geçmeden önce aynı %40 reel oranı **~$495/ay**'a mal
+oluyordu — tek başına model değişikliği aylık maliyeti **~%58 düşürdü**.
 
 ## Maliyeti Daha Da Düşürme Seçenekleri (öncelik sırasıyla)
 
-1. **`veo-3.1-fast-generate-preview`'a geç** — $0.15/sn ($0.40 yerine),
-   reel maliyetini $3.20'den **$1.20**'ye indirir (~%63 tasarruf, kalite
-   biraz düşer).
+1. ✅ **Uygulandı — `veo-3.1-fast-generate-preview`'a geçildi** — $0.15/sn
+   ($0.40 yerine), reel maliyetini $3.20'den **$1.20**'ye indirdi (~%63
+   tasarruf, kalite biraz düşer).
 2. **Döngü sıklığını seyrelt** — 2 saatten 4-6 saate çıkarmak günlük gönderi
    sayısını 12'den 4-6'ya indirir, maliyeti orantılı düşürür.
 3. **Reel ağırlığını manuel düşür** — `DEFAULT_WEIGHTS`'i `carousel: 0.85,

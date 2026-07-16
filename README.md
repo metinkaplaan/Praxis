@@ -53,4 +53,4 @@ No secret is ever committed. `.gitignore` blocks `.env*` from the first commit; 
 
 ## Costs
 
-Reels (Veo) are ~20x more expensive than carousels. See [`docs/COSTS.md`](docs/COSTS.md) for the full per-unit/per-post/monthly breakdown and cost-reduction levers.
+Reels (Veo, now on the cheaper `veo-3.1-fast-generate-preview` tier) are ~7.5x more expensive than carousels. See [`docs/COSTS.md`](docs/COSTS.md) for the full per-unit/per-post/monthly breakdown and cost-reduction levers.
