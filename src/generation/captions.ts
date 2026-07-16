@@ -6,7 +6,7 @@ import { optionalEnv, requireEnv } from "../lib/env.js";
 import { loadGrowthNotes } from "../lib/growth-notes.js";
 import { buildKnowledgeBlock } from "../lib/knowledge.js";
 import { logger } from "../lib/logger.js";
-import type { GeneratedPost } from "../lib/types.js";
+import { CTA_TYPES, HOOK_CATEGORIES, type GeneratedPost } from "../lib/types.js";
 
 const bilingualSchema = z.object({ en: z.string().min(1), tr: z.string().min(1) });
 
@@ -14,16 +14,22 @@ const bilingualSchema = z.object({ en: z.string().min(1), tr: z.string().min(1) 
  * The bilingual `caption` field is the enforcement point for the brand's
  * standing rule: `tr` is required, so output without a Turkish translation
  * is invalid and the run fails loudly instead of publishing English-only copy.
+ * hookCategory/ctaType are the model's self-labels feeding the learning loop.
  */
-const singleSchema = z.object({
+const labeledBase = {
   caption: bilingualSchema,
   hashtags: z.array(z.string()).min(3).max(15),
+  hookCategory: z.enum(HOOK_CATEGORIES),
+  ctaType: z.enum(CTA_TYPES),
+};
+
+const singleSchema = z.object({
+  ...labeledBase,
   imagePrompt: z.string().min(1),
 });
 
 const carouselSchema = z.object({
-  caption: bilingualSchema,
-  hashtags: z.array(z.string()).min(3).max(15),
+  ...labeledBase,
   slides: z
     .array(
       z.object({
@@ -37,10 +43,22 @@ const carouselSchema = z.object({
 });
 
 const reelSchema = z.object({
-  caption: bilingualSchema,
-  hashtags: z.array(z.string()).min(3).max(15),
+  ...labeledBase,
   videoPrompt: z.string().min(1),
 });
+
+/** Gemini responseSchema fragments for the shared labeled fields. */
+const labelResponseProperties = {
+  caption: {
+    type: Type.OBJECT,
+    properties: { en: { type: Type.STRING }, tr: { type: Type.STRING } },
+    required: ["en", "tr"],
+  },
+  hashtags: { type: Type.ARRAY, items: { type: Type.STRING } },
+  hookCategory: { type: Type.STRING, enum: [...HOOK_CATEGORIES] },
+  ctaType: { type: Type.STRING, enum: [...CTA_TYPES] },
+} as const;
+const labelRequired = ["caption", "hashtags", "hookCategory", "ctaType"];
 
 /**
  * Generic aesthetic buzzwords ("dramatic lighting, elegant") reliably produce
@@ -87,6 +105,10 @@ async function buildSharedContext(slot: ContentSlot): Promise<string[]> {
     "- Write for saves and shares, not just likes: give the reader a reason to bookmark this post or send it to their partner.",
     "- End with one clear, low-friction call to action (not multiple asks).",
     "- Hashtags: 2-3 broad/high-volume + 4-6 niche/specific — mix English and Turkish, no banned or spammy tags.",
+    "",
+    "Self-labeling (feeds a learning loop — label honestly, not aspirationally):",
+    `- \`hookCategory\`: which psychological hook category the caption's FIRST sentence actually uses (one of: ${HOOK_CATEGORIES.join(", ")}).`,
+    `- \`ctaType\`: the single CTA you close with (one of: ${CTA_TYPES.join(", ")}).`,
   ];
   if (knowledge) {
     lines.push("", "Instagram playbook (apply these):", knowledge);
@@ -124,15 +146,10 @@ export async function generatePost(slot: ContentSlot): Promise<GeneratedPost> {
         responseSchema: {
           type: Type.OBJECT,
           properties: {
-            caption: {
-              type: Type.OBJECT,
-              properties: { en: { type: Type.STRING }, tr: { type: Type.STRING } },
-              required: ["en", "tr"],
-            },
-            hashtags: { type: Type.ARRAY, items: { type: Type.STRING } },
+            ...labelResponseProperties,
             imagePrompt: { type: Type.STRING },
           },
-          required: ["caption", "hashtags", "imagePrompt"],
+          required: [...labelRequired, "imagePrompt"],
         },
       },
     });
@@ -165,12 +182,7 @@ export async function generatePost(slot: ContentSlot): Promise<GeneratedPost> {
         responseSchema: {
           type: Type.OBJECT,
           properties: {
-            caption: {
-              type: Type.OBJECT,
-              properties: { en: { type: Type.STRING }, tr: { type: Type.STRING } },
-              required: ["en", "tr"],
-            },
-            hashtags: { type: Type.ARRAY, items: { type: Type.STRING } },
+            ...labelResponseProperties,
             slides: {
               type: Type.ARRAY,
               items: {
@@ -184,7 +196,7 @@ export async function generatePost(slot: ContentSlot): Promise<GeneratedPost> {
               },
             },
           },
-          required: ["caption", "hashtags", "slides"],
+          required: [...labelRequired, "slides"],
         },
       },
     });
@@ -217,15 +229,10 @@ export async function generatePost(slot: ContentSlot): Promise<GeneratedPost> {
       responseSchema: {
         type: Type.OBJECT,
         properties: {
-          caption: {
-            type: Type.OBJECT,
-            properties: { en: { type: Type.STRING }, tr: { type: Type.STRING } },
-            required: ["en", "tr"],
-          },
-          hashtags: { type: Type.ARRAY, items: { type: Type.STRING } },
+          ...labelResponseProperties,
           videoPrompt: { type: Type.STRING },
         },
-        required: ["caption", "hashtags", "videoPrompt"],
+        required: [...labelRequired, "videoPrompt"],
       },
     },
   });

@@ -30,6 +30,7 @@ async function main(): Promise<void> {
   draft.status = "published";
   draft.mediaId = mediaId;
   draft.publishedAt = new Date().toISOString();
+  draft.postHourUtc = new Date().getUTCHours();
   await saveDraft(draft);
   await notifyPublished(draft, `media id: ${mediaId}`);
 }

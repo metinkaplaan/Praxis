@@ -56,10 +56,18 @@ export interface CarouselSlide {
   imagePrompt: string;
 }
 
+interface GeneratedPostBase {
+  caption: BilingualCopy;
+  hashtags: string[];
+  /** Self-labels from the generation model — the learning loop's raw signal. */
+  hookCategory: HookCategory;
+  ctaType: CtaType;
+}
+
 export type GeneratedPost =
-  | { format: "single"; caption: BilingualCopy; hashtags: string[]; imagePrompt: string }
-  | { format: "carousel"; caption: BilingualCopy; hashtags: string[]; slides: CarouselSlide[] }
-  | { format: "reel"; caption: BilingualCopy; hashtags: string[]; videoPrompt: string };
+  | (GeneratedPostBase & { format: "single"; imagePrompt: string })
+  | (GeneratedPostBase & { format: "carousel"; slides: CarouselSlide[] })
+  | (GeneratedPostBase & { format: "reel"; videoPrompt: string });
 
 interface DraftBase {
   id: string;
@@ -76,9 +84,17 @@ interface DraftBase {
   publishedAt?: string;
   /** Filled in by collect-insights once metrics have been recorded. */
   insightsCollectedAt?: string;
+  /**
+   * Learning-loop metadata. Optional because drafts created before Wave 3
+   * exist in R2 without them; new drafts always carry hookCategory/ctaType,
+   * and postHourUtc is written at publish time by publish-draft.ts.
+   */
+  hookCategory?: HookCategory;
+  ctaType?: CtaType;
+  postHourUtc?: number;
 }
 
 export type Draft =
   | (DraftBase & { format: "single"; imageUrl: string })
   | (DraftBase & { format: "carousel"; imageUrls: string[] })
-  | (DraftBase & { format: "reel"; videoUrl: string });
+  | (DraftBase & { format: "reel"; videoUrl: string; videoDurationSec?: number });

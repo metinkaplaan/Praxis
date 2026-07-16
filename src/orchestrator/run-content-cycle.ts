@@ -42,6 +42,8 @@ async function main(): Promise<void> {
     intensity: slot.intensity.id,
     caption: post.caption,
     hashtags: post.hashtags,
+    hookCategory: post.hookCategory,
+    ctaType: post.ctaType,
     status: "pending_approval" as const,
   };
 
@@ -59,8 +61,8 @@ async function main(): Promise<void> {
     draft = { ...base, format: "carousel", imageUrls };
   } else {
     const video = await generateVideo(post.videoPrompt);
-    const videoUrl = await uploadPublic(`media/${id}.mp4`, video, "video/mp4");
-    draft = { ...base, format: "reel", videoUrl };
+    const videoUrl = await uploadPublic(`media/${id}.mp4`, video.bytes, "video/mp4");
+    draft = { ...base, format: "reel", videoUrl, videoDurationSec: video.durationSec };
   }
 
   await saveDraft(draft);
