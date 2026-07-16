@@ -54,6 +54,9 @@ bir **Instagram Growth Operating System**'dir.
 5. **Feed-safe içerik:** iddialı ama asla müstehcen değil; Instagram içerik
    politikalarına tam uyum.
 6. **Secret disiplini:** hiçbir kimlik bilgisi repo'ya yazılmaz.
+7. **Yaş aralığı:** görsel/videoda tasvir edilen herkes her zaman 20-35 yaş
+   aralığında görünür — hedef kitlemiz bu yaş grubu, daha yaşlı/olgun bir
+   görünüm asla kullanılmaz.
 
 ## Operatör-Besleme Protokolü
 
