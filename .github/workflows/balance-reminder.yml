@@ -1,0 +1,27 @@
+name: balance-reminder
+
+on:
+  # Operator declined Gemini auto-reload (wants manual control over top-ups) —
+  # this is the safety net: a weekly Telegram nudge to check the AI Studio
+  # prepaid balance before it runs out silently. Weekly is a comfortable
+  # margin under the ~10-12 day runway a typical top-up covers at the fixed
+  # daily plan's ~$3.92/day burn rate (docs/COSTS.md).
+  schedule:
+    - cron: "0 6 * * 1" # every Monday, 06:00 UTC / 09:00 TR
+  workflow_dispatch: {}
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run balance-reminder
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
