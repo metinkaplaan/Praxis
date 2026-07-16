@@ -1,20 +1,18 @@
 name: content-cycle
 
 on:
-  # PAUSED 2026-07-15: Gemini prepaid credits depleted — every scheduled run
-  # fails with 429 RESOURCE_EXHAUSTED and spams Telegram. Re-enable by
-  # uncommenting once credits are topped up (https://ai.studio/projects).
+  # RE-ENABLED 2026-07-16: Gemini prepaid credits topped up (1853 TL).
   #
   # Fixed daily plan (agreed 2026-07-16): 5 posts/day, 3 reels + 2 carousels —
-  # NOT a rotating N-hour cycle anymore. Each cron line below is a distinct
-  # slot; the "Determine forced format" step maps github.event.schedule to
-  # the format for that slot. Times are UTC (≈ TR local +3h in parens).
-  # schedule:
-  #   - cron: "0 8 * * *"   # 08:00 UTC / 11:00 TR — reel
-  #   - cron: "0 11 * * *"  # 11:00 UTC / 14:00 TR — carousel
-  #   - cron: "30 14 * * *" # 14:30 UTC / 17:30 TR — reel
-  #   - cron: "0 18 * * *"  # 18:00 UTC / 21:00 TR — carousel
-  #   - cron: "30 21 * * *" # 21:30 UTC / 00:30 TR — reel
+  # NOT a rotating N-hour cycle. Each cron line below is a distinct slot; the
+  # "Determine forced format" step maps github.event.schedule to the format
+  # for that slot. Times are UTC (≈ TR local +3h in parens).
+  schedule:
+    - cron: "0 8 * * *"   # 08:00 UTC / 11:00 TR — reel
+    - cron: "0 11 * * *"  # 11:00 UTC / 14:00 TR — carousel
+    - cron: "30 14 * * *" # 14:30 UTC / 17:30 TR — reel
+    - cron: "0 18 * * *"  # 18:00 UTC / 21:00 TR — carousel
+    - cron: "30 21 * * *" # 21:30 UTC / 00:30 TR — reel
   workflow_dispatch:
     inputs:
       force_format:
