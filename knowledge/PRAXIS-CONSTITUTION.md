@@ -30,12 +30,15 @@ bir **Instagram Growth Operating System**'dir.
 ## Yetenek Dalgaları
 
 1. ✅ **Dalga 1-2 (tamamlandı):** üretim + onay + yayın + insights toplama altyapısı
-2. 🔨 **Dalga 3 — "Beyin" (bu dalga):** Bilgi Merkezi (`knowledge/instagram/`) +
+2. ✅ **Dalga 3 — "Beyin" (tamamlandı):** Bilgi Merkezi (`knowledge/instagram/`) +
    Öğrenme Agentı (hook/CTA/saat/süre boyutlu gözlem log'u + kural-tabanlı
-   learnings geri beslemesi)
-3. ⏭️ **Sonraki dalgalar:** İçerik Planlayıcı (30 günlük takvim), Performans
-   Analiz Agentı ("neden başarılı/başarısız?"), analiz ajanlarının
-   derinleştirilmesi, @girlsofmidnight, Reddit tester akışı
+   learnings geri beslemesi) — gerçek öğrenme, yeterli olgunlaşmış veri
+   birikince devreye girecek
+3. ✅ **Dalga 3.5 — Analiz protokolü (tamamlandı):** operatör-beslemeli
+   viral/rakip/trend analizi için somut rubrik (`knowledge/analysis-log.md`)
+4. ⏭️ **Sonraki dalgalar:** İçerik Planlayıcı (30 günlük takvim, yeterli
+   gerçek veri birikince anlamlı), analiz ajanlarının derinleştirilmesi,
+   @girlsofmidnight, Reddit tester akışı
 
 ## Değişmez Kurallar
 
@@ -57,11 +60,14 @@ bir **Instagram Growth Operating System**'dir.
 Viral reel analizi, rakip analizi ve trend takibi **operatör-beslemelidir**:
 
 1. Operatör bir reel linki / ekran görüntüsü / gözlem getirir (sohbette).
-2. Claude bunu Growth OS kriterleriyle analiz eder: hook puanı, ilk 3 saniye,
-   tempo, kurgu, altyazı, görsel/ses kalitesi, CTA, tahmini viral potansiyel —
-   ve en önemlisi **"Neden?"** sorusunun cevabı.
-3. Çıkarımlar ilgili `knowledge/instagram/*.md` dosyasına veya
-   `knowledge/growth-notes.md`'ye commit'lenir.
+2. Claude bunu `knowledge/analysis-log.md`'deki rubrikle analiz eder (hook,
+   tempo, kurgu, altyazı, görsel/ses kalitesi, CTA, tahmini viral potansiyel,
+   1-10 puanlama) ve en önemlisi **"Neden?"** sorusunu cevaplar → analiz
+   `analysis-log.md`'ye ham kayıt olarak eklenir (bu dosya prompt'a girmez,
+   sadece arşivdir).
+3. Analizden çıkan **damıtılmış, eyleme dönük ders** ilgili
+   `knowledge/instagram/*.md` dosyasının Cheat Sheet'ine veya
+   `knowledge/growth-notes.md`'ye ayrıca yazılır — bunlar prompt'a girer.
 4. Böylece her analiz kalıcı bilgiye dönüşür; sistem bir sonraki üretimde
    otomatik olarak bundan yararlanır.
 
