@@ -87,9 +87,18 @@ export function chooseFormat(ledger: PerformanceLedger, ctx: FormatSelectionCont
   }));
 
   const hasAnyData = perFormat.some((f) => f.entry);
-  const underSampled = perFormat.filter((f) => (f.entry?.postCount ?? 0) < minSamples);
 
-  if (!hasAnyData || Math.random() < epsilon) {
+  // Cold start (no ledger data for ANY format yet): use the cost-aware
+  // bootstrap weights, not a uniform coin flip. Reels cost ~20x a carousel
+  // (see docs/COSTS.md) — picking formats blind to that burned through the
+  // Gemini credits fast. This branch is deterministic (no randomness) so
+  // spend stays predictable until real performance data exists to learn from.
+  if (!hasAnyData) {
+    return weightedPick(DEFAULT_WEIGHTS);
+  }
+
+  const underSampled = perFormat.filter((f) => (f.entry?.postCount ?? 0) < minSamples);
+  if (Math.random() < epsilon) {
     const pool = underSampled.length > 0 ? underSampled : perFormat;
     return pool[Math.floor(Math.random() * pool.length)]!.format;
   }
