@@ -50,3 +50,7 @@ GitHub Actions (cron, every 2h)          Vercel (praxis web/, serverless)
 ## Security
 
 No secret is ever committed. `.gitignore` blocks `.env*` from the first commit; enable **Secret Scanning + Push Protection** in the repo settings. The `GH_PAT_SECRETS_WRITE` token must be fine-grained, scoped to this repo only, with only *Secrets: Read and write*.
+
+## Costs
+
+Reels (Veo) are ~20x more expensive than carousels. See [`docs/COSTS.md`](docs/COSTS.md) for the full per-unit/per-post/monthly breakdown and cost-reduction levers.
