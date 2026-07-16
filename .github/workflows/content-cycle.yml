@@ -1,8 +1,11 @@
 name: content-cycle
 
 on:
-  schedule:
-    - cron: "0 */2 * * *" # every 2 hours; GitHub may delay a few minutes, which is fine
+  # PAUSED 2026-07-15: Gemini prepaid credits depleted — every scheduled run
+  # fails with 429 RESOURCE_EXHAUSTED and spams Telegram. Re-enable by
+  # uncommenting once credits are topped up (https://ai.studio/projects).
+  # schedule:
+  #   - cron: "0 */2 * * *" # every 2 hours; GitHub may delay a few minutes, which is fine
   workflow_dispatch:
     inputs:
       force_format:
