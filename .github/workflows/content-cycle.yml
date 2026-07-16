@@ -4,8 +4,17 @@ on:
   # PAUSED 2026-07-15: Gemini prepaid credits depleted — every scheduled run
   # fails with 429 RESOURCE_EXHAUSTED and spams Telegram. Re-enable by
   # uncommenting once credits are topped up (https://ai.studio/projects).
+  #
+  # Fixed daily plan (agreed 2026-07-16): 5 posts/day, 3 reels + 2 carousels —
+  # NOT a rotating N-hour cycle anymore. Each cron line below is a distinct
+  # slot; the "Determine forced format" step maps github.event.schedule to
+  # the format for that slot. Times are UTC (≈ TR local +3h in parens).
   # schedule:
-  #   - cron: "0 */2 * * *" # every 2 hours; GitHub may delay a few minutes, which is fine
+  #   - cron: "0 8 * * *"   # 08:00 UTC / 11:00 TR — reel
+  #   - cron: "0 11 * * *"  # 11:00 UTC / 14:00 TR — carousel
+  #   - cron: "30 14 * * *" # 14:30 UTC / 17:30 TR — reel
+  #   - cron: "0 18 * * *"  # 18:00 UTC / 21:00 TR — carousel
+  #   - cron: "30 21 * * *" # 21:30 UTC / 00:30 TR — reel
   workflow_dispatch:
     inputs:
       force_format:
@@ -27,9 +36,20 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Determine forced format for this schedule slot
+        id: format
+        run: |
+          case "${{ github.event.schedule }}" in
+            "0 8 * * *")   echo "value=reel" >> "$GITHUB_OUTPUT" ;;
+            "0 11 * * *")  echo "value=carousel" >> "$GITHUB_OUTPUT" ;;
+            "30 14 * * *") echo "value=reel" >> "$GITHUB_OUTPUT" ;;
+            "0 18 * * *")  echo "value=carousel" >> "$GITHUB_OUTPUT" ;;
+            "30 21 * * *") echo "value=reel" >> "$GITHUB_OUTPUT" ;;
+            *)             echo "value=${{ inputs.force_format }}" >> "$GITHUB_OUTPUT" ;;
+          esac
       - run: npm run content-cycle
         env:
-          FORCE_FORMAT: ${{ inputs.force_format }}
+          FORCE_FORMAT: ${{ steps.format.outputs.value }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}

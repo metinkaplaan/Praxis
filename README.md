@@ -1,13 +1,13 @@
 # Praxis
 
-Content automation for the **Midnight** brand: AI content generation (Gemini), Instagram publishing (Meta Graph API), Telegram notifications, and a 2-hour autonomous production cycle — all running on free infrastructure (GitHub Actions + Vercel + Cloudflare R2), no purchased domain and no always-on server required.
+Content automation for the **Midnight** brand: AI content generation (Gemini), Instagram publishing (Meta Graph API), Telegram notifications, and a fixed daily production plan (5 posts/day: 3 reels + 2 carousels) — all running on free infrastructure (GitHub Actions + Vercel + Cloudflare R2), no purchased domain and no always-on server required.
 
-**Türkçe:** Midnight markası için içerik otomasyonu: yapay zekâ ile içerik üretimi (Gemini), Instagram yayınlama (Meta Graph API), Telegram bildirimleri ve 2 saatlik otonom üretim döngüsü — tamamı ücretsiz altyapıda (GitHub Actions + Vercel + Cloudflare R2), satın alınmış domain ve sürekli açık sunucu gerektirmeden.
+**Türkçe:** Midnight markası için içerik otomasyonu: yapay zekâ ile içerik üretimi (Gemini), Instagram yayınlama (Meta Graph API), Telegram bildirimleri ve sabit bir günlük üretim planı (günde 5 gönderi: 3 reel + 2 carousel) — tamamı ücretsiz altyapıda (GitHub Actions + Vercel + Cloudflare R2), satın alınmış domain ve sürekli açık sunucu gerektirmeden.
 
 ## Architecture / Mimari
 
 ```
-GitHub Actions (cron, every 2h)          Vercel (praxis web/, serverless)
+GitHub Actions (5 fixed daily crons)     Vercel (praxis web/, serverless)
 ┌──────────────────────────────┐        ┌───────────────────────────────┐
 │ content-cycle.yml            │        │ /api/auth/instagram/callback  │ ← Meta OAuth
 │  generate captions (Gemini)  │        │ /api/telegram/webhook         │ ← approve buttons

@@ -11,9 +11,12 @@ export interface ContentSlot {
 }
 
 /**
- * Deterministic rotation for category/intensity/market/account: every 2-hour
- * cycle picks the next combination. Using the cycle index (hours since epoch
- * / 2) keeps the schedule stable across stateless GitHub Actions runs.
+ * Deterministic rotation for category/intensity/market/account, keyed off
+ * wall-clock time (hours since epoch / 2) rather than an invocation counter —
+ * this keeps the rotation stable across stateless GitHub Actions runs no
+ * matter how often (or irregularly) the workflow actually fires. The content
+ * cycle itself now runs on a fixed daily plan (5 posts/day: 3 reels + 2
+ * carousels, see content-cycle.yml), not a rotating N-hour cycle.
  *
  * `format` is the one dimension that's NOT deterministic — it's picked by
  * format-selector.ts (epsilon-greedy against the R2 performance ledger), which

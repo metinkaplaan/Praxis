@@ -33,26 +33,48 @@ istatistiksel testte %60.4/%39.6 çıktı (beklenen dağılıma uygun). Ledger'd
 veri birikmeye başladıktan sonra epsilon-greedy öğrenme mantığı (mevcut
 davranış, değişmedi) devreye girecek.
 
-## Aylık Projeksiyon (2 saatlik döngü = günde 12 üretim)
+## ✅ Sabit Günlük Plan (2026-07-16 itibarıyla): rotasyon değil, 5 gönderi/gün
 
-| Senaryo | Reel oranı | Gönderi başına ort. maliyet | Günlük | Aylık |
-|---|---|---|---|---|
-| **Şu anki davranış (Veo Fast + cold-start %60/%40)** | %40 | $0.576 | $6.91 | **~$207** |
-| Reel %15'e düşürülürse | %15 | $0.316 | $3.79 | ~$114 |
-| Sadece carousel (reel geçici kapalı) | %0 | $0.16 | $1.92 | ~$58 |
+Döngü artık N saatte bir dönen bir rotasyon değil — **sabit bir günlük plan**:
+her gün 5 gönderi, **3 reel + 2 carousel**, `content-cycle.yml`'de 5 ayrı cron
+zamanına bağlanmış (her biri `github.event.schedule` ile eşleştirilip
+`FORCE_FORMAT` olarak enjekte ediliyor — format-selector.ts'in epsilon-greedy
+mantığı artık sadece manuel `workflow_dispatch` çalıştırmalarında devreye
+giriyor). Zamanlar (UTC / TR):
 
-Karşılaştırma: Veo Fast'e geçmeden önce aynı %40 reel oranı **~$495/ay**'a mal
-oluyordu — tek başına model değişikliği aylık maliyeti **~%58 düşürdü**.
+| Saat (UTC) | Saat (TR) | Format |
+|---|---|---|
+| 08:00 | 11:00 | Reel |
+| 11:00 | 14:00 | Carousel |
+| 14:30 | 17:30 | Reel |
+| 18:00 | 21:00 | Carousel |
+| 21:30 | 00:30 | Reel |
 
-## Maliyeti Daha Da Düşürme Seçenekleri (öncelik sırasıyla)
+## Aylık Projeksiyon (sabit plan: günde 3 reel + 2 carousel)
+
+| Kalem | Adet/gün | Birim maliyet | Günlük |
+|---|---|---|---|
+| Reel | 3 | $1.20 | $3.60 |
+| Carousel | 2 | $0.16 | $0.32 |
+| **Toplam** | **5** | — | **$3.92/gün** |
+
+**Aylık (30 gün): ~$117.60**
+
+Karşılaştırma: Veo Fast'e geçmeden önceki 12-gönderi/gün rotasyonu (%40 reel)
+~$495/ay'a mal oluyordu — sabit 5-gönderi/gün plan + Veo Fast birlikte aylık
+maliyeti **~%76 düşürdü**.
+
+## Maliyeti Daha Da Düşürme Seçenekleri
 
 1. ✅ **Uygulandı — `veo-3.1-fast-generate-preview`'a geçildi** — $0.15/sn
    ($0.40 yerine), reel maliyetini $3.20'den **$1.20**'ye indirdi (~%63
    tasarruf, kalite biraz düşer).
-2. **Döngü sıklığını seyrelt** — 2 saatten 4-6 saate çıkarmak günlük gönderi
-   sayısını 12'den 4-6'ya indirir, maliyeti orantılı düşürür.
-3. **Reel ağırlığını manuel düşür** — `DEFAULT_WEIGHTS`'i `carousel: 0.85,
-   reel: 0.15` yap (artık cold-start'ta da gerçekten uygulanıyor).
+2. ✅ **Uygulandı — sabit günlük plan** — rotasyondaki günde 12 üretim yerine
+   günde 5 sabit gönderi (3 reel + 2 carousel), aylık maliyeti öngörülebilir
+   kıldı ve düşürdü.
+3. Reel/carousel oranı daha da düşürülmek istenirse (ör. 2 reel + 3 carousel),
+   `content-cycle.yml`'deki 5 cron satırının format eşlemesi değiştirilir —
+   kod değişikliği gerekmez.
 
 ## Ücretsiz Altyapı (mevcut ölçekte $0)
 
