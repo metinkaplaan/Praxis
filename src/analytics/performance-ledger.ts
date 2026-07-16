@@ -64,6 +64,21 @@ export interface MediaMetrics {
   plays?: number;
 }
 
+/**
+ * Reach-normalizes a single post's raw metrics into the same 0.4/0.3/0.2/0.1
+ * (save/share/like/comment) weighted score used by the ledger, so a single
+ * observation (observations.ts) and a ledger entry are directly comparable.
+ */
+export function scorePost(metrics: MediaMetrics): number {
+  const reach = Math.max(metrics.reach, 1);
+  return scoreOf({
+    save: metrics.saved / reach,
+    share: metrics.shares / reach,
+    like: metrics.likeCount / reach,
+    comment: metrics.commentCount / reach,
+  });
+}
+
 /** Pure — incremental running average, no IO. Used by collect-insights.ts. */
 export function recordOutcome(
   ledger: PerformanceLedger,

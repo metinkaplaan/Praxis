@@ -3,6 +3,7 @@ import { z } from "zod";
 import { IG_HANDLES, MIDNIGHT_BRAND } from "../brands/midnight/brand.js";
 import type { ContentSlot } from "../brands/midnight/content-calendar.js";
 import { optionalEnv, requireEnv } from "../lib/env.js";
+import { loadLearningsPromptBlock } from "../analytics/learnings.js";
 import { loadGrowthNotes } from "../lib/growth-notes.js";
 import { buildKnowledgeBlock } from "../lib/knowledge.js";
 import { logger } from "../lib/logger.js";
@@ -84,6 +85,7 @@ const REALISM_DIRECTIVE = [
 async function buildSharedContext(slot: ContentSlot): Promise<string[]> {
   const growthNotes = await loadGrowthNotes();
   const knowledge = await buildKnowledgeBlock(slot.format);
+  const learnings = await loadLearningsPromptBlock();
   const lines = [
     `You write Instagram content for "${MIDNIGHT_BRAND.name}", a couples' game app.`,
     "Mission: every post exists to grow the Midnight app — follower growth, profile visits, app installs. Optimize for saves and shares.",
@@ -112,6 +114,9 @@ async function buildSharedContext(slot: ContentSlot): Promise<string[]> {
   ];
   if (knowledge) {
     lines.push("", "Instagram playbook (apply these):", knowledge);
+  }
+  if (learnings) {
+    lines.push("", "Learned from OUR OWN past performance (own-account Insights — trust these):", learnings);
   }
   if (growthNotes) {
     lines.push(
