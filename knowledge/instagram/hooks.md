@@ -41,6 +41,7 @@
 - "The biggest threat to your relationship isn't another person — it's autopilot."
 - "If you can't remember your last exciting night together, read this."
 - "Don't let 'tired tonight' become the story of your relationship."
+- "If your evenings feel stuck on repeat — this is for you."
 
 ## humor — Mizah
 
@@ -71,6 +72,7 @@
 - "Experts call it 'self-expansion': new experiences literally re-attract you to each other."
 - "The 36-questions study proved strangers can fall in love in one night. Imagine what it does for couples."
 - "Psychologists say curiosity is the antidote to relationship boredom."
+- "From silent dinners to 2am conversations — couples keep telling us the same story."
 
 ## story — Hikaye
 
@@ -89,6 +91,7 @@
 - "90% of couples pick the safe category first. The other 10% have more fun."
 - "It takes 4 minutes of real questions to feel closer than a whole dinner."
 - "3 levels: Soft, Medium, Full Throttle. Where do you two stop?"
+- "We've watched 1,000 couples play. The same card gets skipped every time."
 
 ## conflict — Çatışma
 
@@ -117,3 +120,4 @@
 - "Forget 'spice things up'. You can't spice what you never season."
 - "Your relationship isn't boring. Your evenings are."
 - "Don't buy her another gift. Ask her the question she's waiting for."
+- "Everyone says communication saves relationships. They forget the fun half."

@@ -9,6 +9,7 @@
 - Match the CTA to the content: practical/list content → save; identity/relatable → send_to_partner or share; opinion-splitting → comment; brand story → profile_visit/follow.
 - send_to_partner is Midnight's signature CTA — "send this to your partner" doubles as a share signal AND puts the app in front of the exact next user.
 - Make the action feel small and immediate ("save this for Friday night"), never needy ("please like").
+- Never sound like a sales pitch: frame the CTA as the natural continuation of the post's moment ("the rest of this conversation lives in the game"), inviting dialogue or a shared experience — not pushing a product.
 - Never use explicit engagement bait phrasing ("like if you agree") — Instagram demotes it.
 
 ## CTA Tipleri ve Kullanım Durumları
