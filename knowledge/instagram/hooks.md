@@ -10,6 +10,7 @@
 - One hook per post. Pick the psychological angle that fits the theme; don't stack.
 - Speak to one person ("you"), present tense, concrete words — no warm-up, no context-setting before the hook.
 - The hook opens a loop the rest of the post must close; never resolve it in the first sentence.
+- The hook must land with someone who has NEVER seen this account: no reliance on prior authority or brand familiarity, no niche jargon — instant curiosity within 0-2 seconds, promising something specific and observable.
 - Curiosity, conflict and forbidden angles fit Midnight's after-dark brand best; humor and numbers are good for variety.
 
 ## curiosity — Merak

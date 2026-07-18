@@ -7,10 +7,11 @@
 
 - Instagram ranks by predicted engagement: watch time / completion first, then saves + shares, then comments, then likes. Optimize in that order.
 - The first 3 seconds (reel) or first slide (carousel) decides distribution — if viewers scroll past, reach dies.
-- Saves and shares ("send to a friend/partner") are the strongest growth signals; design every post so someone has a concrete reason to save or send it.
-- Carousels get a second chance: if a viewer doesn't swipe, Instagram may re-serve slide 2 later — make slide 2 strong on its own.
-- Consistency beats bursts: steady posting builds account trust; long gaps then floods look spammy.
-- Reply-worthy captions (a question, a "which one are you?") lift comment rate, which lifts reach.
+- Saves and shares ("send to a friend/partner") are the strongest growth signals; give every post a concrete save/share trigger.
+- Cold-start: assume the viewer has NEVER seen this account — every post must survive the algorithm's test with strangers and serve ONE clear goal (reach, saves, or follows); no generic content or logic-free trend imitation.
+- Reel structure: no dead pauses — constant visual rhythm and micro-curiosity, plus a natural rewatch/loop trigger; linear content dies early.
+- Carousel second chance: Instagram may re-serve slide 2 to non-swipers later — make slide 2 strong on its own.
+- Consistency beats bursts; reply-worthy captions (a question, a "which one are you?") lift comments and reach.
 - Never bait engagement explicitly ("like this post!") — Instagram demotes engagement bait. Earn the action instead.
 
 ## Reels Algoritması
@@ -67,3 +68,57 @@
 2. Erken sinyaller iyi (retention/save/share) → daha geniş takipçi + keşfet testi
 3. Keşfet testinde de iyi → viral döngü; kötü → dağıtım durur
 4. Gönderi "ölmez": güçlü carousel'ler haftalar sonra yeniden dağıtım alabilir
+
+## Sıfırdan Büyüme — Erişim Mühendisliği
+
+> Kaynak: operatör-beslemeli carousel analizi (2026-07-17, bkz.
+> `knowledge/analysis-log.md`). Sıfır/az takipçili hesap fazına özel playbook —
+> Midnight şu an tam bu fazda.
+
+**Ana hedef** — üretilen her içerik:
+
+- Mevcut bir takipçi kitlesi OLMADAN çalışır (soğuk izleyiciye tek başına mantıklı gelir)
+- Ortalama üstü elde tutma (retention) oranı kurar
+- Algoritmayı içeriği TEST etmeye zorlar (net sinyal üretir, kararsız bırakmaz)
+- Explore ve Reels üzerinden dağıtım alır
+- Erişimi kademeli olarak ölçeklendirir
+
+**Algoritma test zinciri** — tüm içerik şu zinciri izler; başlangıç testini
+geçemeyen içerik elenir:
+
+1. Başlangıç testi (küçük, çoğunlukla takipçi-olmayan kitle)
+2. Yüksek elde tutma oranı
+3. Tekrarlanan görüntülemeler (tekrar oynatmalar)
+4. Hızlı etkileşimler
+5. Erişim genişletme
+
+**Dağıtımı ölçeklendiren sinyaller** (optimize edilecekler): izleme süresi,
+kaydetmeler, paylaşımlar, basit yorumlar. Hangi sinyalin hedeflendiği ve
+Instagram'ın dağıtımı neden genişleteceği her gönderi için netleştirilmeli.
+
+**Ortalama üstü tutulma — içerik yapılandırma:**
+
+- Ölü duraklamalardan kaçın
+- Mikro merak uyandır (an be an yeni bir küçük soru/gerilim)
+- Görsel ritmi koru
+- Doğal tekrarları teşvik et (loop/tekrar-izleme tetikleyicisi)
+- Doğrusal içerik çabuk ölür
+
+**Yabancılar için dil** — iletişim şunlara göre uyarlanır:
+
+- Henüz hesaba güvenmeyenler
+- Kalmaya mı gitmeye mi karar verdiğini 1-2 saniyede veren izleyiciler
+- Niş jargonu anlamayanlar
+- Netlik, ilk otoriteyi yener
+
+**Attack sequence** — algoritmik hedefi net 5-10 başlangıç gönderisinden
+oluşan dizi; erişim hedefi basitten cesura doğru ilerler. Yayınlama sırasının
+arkasındaki mantık her gönderi için açıklanabilir olmalı.
+
+**Kesin kurallar:**
+
+- Takipçilere güvenme (takipçi sayısına yaslanan içerik kurma)
+- Genel/jenerik içerik yok
+- Mantıksız (hedefi açıklanamayan) trend taklidi yok
+- Daima NEDEN'i açıkla — bu gönderi hangi sinyali neden üretecek
+- Bir yeni başlayan yaratıcı gibi değil, bir erişim mühendisi gibi düşün
