@@ -36,6 +36,8 @@ GitHub Actions (5 fixed daily crons)     Vercel (praxis web/, serverless)
 | `src/storage/` | Cloudflare R2 uploads, draft manifests |
 | `src/notify/telegram.ts` | Notifications + approval previews |
 | `src/auth/instagram-token.ts` | Long-lived token refresh + GitHub secret rotation |
+| `src/analytics/` | Performance ledger, observations, rule-based learnings |
+| `src/planning/` | 30-day content plan (topic/hook/goal lookahead + evergreen reuse), weekly top-up |
 | `src/orchestrator/` | Entrypoints wired to the workflows |
 | `web/` | Minimal Next.js app deployed as a **separate** Vercel project |
 | `.github/workflows/` | The scheduler — see diagram above |

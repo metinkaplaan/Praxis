@@ -1,15 +1,22 @@
 import { randomUUID } from "node:crypto";
+import { CATEGORIES, INTENSITIES } from "../brands/midnight/categories.js";
 import { pickSlot } from "../brands/midnight/content-calendar.js";
-import { generatePost } from "../generation/captions.js";
+import { generatePost, type PlanHints } from "../generation/captions.js";
 import { generateCarouselImages, generateImage } from "../generation/images.js";
 import { generateVideo } from "../generation/video.js";
 import { logger } from "../lib/logger.js";
 import type { Draft, PostFormat } from "../lib/types.js";
 import { notifyFailure, sendDraftPreview } from "../notify/telegram.js";
+import { entryFor, loadContentPlan } from "../planning/content-plan.js";
 import { saveDraft } from "../storage/drafts.js";
 import { uploadPublic } from "../storage/r2.js";
 
 const FORCE_FORMAT = process.env.FORCE_FORMAT as PostFormat | undefined;
+const SLOT_INDEX = process.env.SLOT_INDEX !== undefined && process.env.SLOT_INDEX !== "" ? Number(process.env.SLOT_INDEX) : undefined;
+
+function todayIso(): string {
+  return new Date().toISOString().slice(0, 10);
+}
 
 /**
  * The 2-hour cycle (content-cycle.yml): generate → store → ask for approval.
@@ -22,6 +29,28 @@ async function main(): Promise<void> {
     logger.info("FORCE_FORMAT override active", { from: slot.format, to: FORCE_FORMAT });
     slot.format = FORCE_FORMAT;
   }
+
+  // Content planner (src/planning/) override — additive only. If the plan
+  // hasn't been generated yet, R2 is briefly unavailable, or this is a manual
+  // workflow_dispatch run without SLOT_INDEX, planEntry is undefined and
+  // behavior is byte-for-byte identical to the live pickSlot() rotation.
+  const planEntry = SLOT_INDEX !== undefined ? entryFor(await loadContentPlan(), todayIso(), SLOT_INDEX) : undefined;
+  let hints: PlanHints | undefined;
+  if (planEntry) {
+    const plannedCategory = CATEGORIES.find((c) => c.id === planEntry.category);
+    const plannedIntensity = INTENSITIES.find((i) => i.id === planEntry.intensity);
+    if (plannedCategory) slot.category = plannedCategory;
+    if (plannedIntensity) slot.intensity = plannedIntensity;
+    hints = { targetHook: planEntry.hookCategory, targetGoal: planEntry.goal, isEvergreen: planEntry.isEvergreen };
+    logger.info("content plan entry applied", {
+      date: planEntry.date,
+      slotIndex: planEntry.slotIndex,
+      category: planEntry.category,
+      hookCategory: planEntry.hookCategory,
+      isEvergreen: planEntry.isEvergreen,
+    });
+  }
+
   logger.info("cycle start", {
     account: slot.account,
     market: slot.market,
@@ -30,7 +59,7 @@ async function main(): Promise<void> {
     format: slot.format,
   });
 
-  const post = await generatePost(slot);
+  const post = await generatePost(slot, hints);
 
   const id = randomUUID();
   const base = {
@@ -45,6 +74,11 @@ async function main(): Promise<void> {
     hookCategory: post.hookCategory,
     ctaType: post.ctaType,
     status: "pending_approval" as const,
+    ...(planEntry?.isEvergreen
+      ? {
+          evergreenNote: `🔁 Evergreen replay: '${planEntry.category}' teması, geçmişte iyi performans gösteren bir tarifin tekrarı.`,
+        }
+      : {}),
   };
 
   let draft: Draft;

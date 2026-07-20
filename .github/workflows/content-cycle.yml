@@ -34,20 +34,21 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - name: Determine forced format for this schedule slot
+      - name: Determine forced format and slot index for this schedule slot
         id: format
         run: |
           case "${{ github.event.schedule }}" in
-            "0 8 * * *")   echo "value=reel" >> "$GITHUB_OUTPUT" ;;
-            "0 11 * * *")  echo "value=carousel" >> "$GITHUB_OUTPUT" ;;
-            "30 14 * * *") echo "value=reel" >> "$GITHUB_OUTPUT" ;;
-            "0 18 * * *")  echo "value=carousel" >> "$GITHUB_OUTPUT" ;;
-            "30 21 * * *") echo "value=reel" >> "$GITHUB_OUTPUT" ;;
-            *)             echo "value=${{ inputs.force_format }}" >> "$GITHUB_OUTPUT" ;;
+            "0 8 * * *")   echo "value=reel"     >> "$GITHUB_OUTPUT"; echo "slot_index=0" >> "$GITHUB_OUTPUT" ;;
+            "0 11 * * *")  echo "value=carousel" >> "$GITHUB_OUTPUT"; echo "slot_index=1" >> "$GITHUB_OUTPUT" ;;
+            "30 14 * * *") echo "value=reel"     >> "$GITHUB_OUTPUT"; echo "slot_index=2" >> "$GITHUB_OUTPUT" ;;
+            "0 18 * * *")  echo "value=carousel" >> "$GITHUB_OUTPUT"; echo "slot_index=3" >> "$GITHUB_OUTPUT" ;;
+            "30 21 * * *") echo "value=reel"     >> "$GITHUB_OUTPUT"; echo "slot_index=4" >> "$GITHUB_OUTPUT" ;;
+            *)             echo "value=${{ inputs.force_format }}" >> "$GITHUB_OUTPUT"; echo "slot_index=" >> "$GITHUB_OUTPUT" ;;
           esac
       - run: npm run content-cycle
         env:
           FORCE_FORMAT: ${{ steps.format.outputs.value }}
+          SLOT_INDEX: ${{ steps.format.outputs.slot_index }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}

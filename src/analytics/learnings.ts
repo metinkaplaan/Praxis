@@ -124,3 +124,10 @@ export async function loadLearningsPromptBlock(): Promise<string> {
   const learnings = JSON.parse(text) as Learnings;
   return learnings.promptLines.join("\n");
 }
+
+/** Structured access to the computed learnings (top/bottom per dimension) — for consumers other than prompt-building, e.g. the content planner. Returns undefined if learnings haven't been computed yet. */
+export async function loadLearnings(): Promise<Learnings | undefined> {
+  const text = await getObjectTextOrNull(LEARNINGS_KEY);
+  if (!text) return undefined;
+  return JSON.parse(text) as Learnings;
+}

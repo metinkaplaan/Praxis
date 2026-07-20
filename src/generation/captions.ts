@@ -7,7 +7,7 @@ import { loadLearningsPromptBlock } from "../analytics/learnings.js";
 import { loadGrowthNotes } from "../lib/growth-notes.js";
 import { buildKnowledgeBlock } from "../lib/knowledge.js";
 import { logger } from "../lib/logger.js";
-import { CTA_TYPES, HOOK_CATEGORIES, type GeneratedPost } from "../lib/types.js";
+import { CTA_TYPES, HOOK_CATEGORIES, type CtaType, type GeneratedPost, type HookCategory } from "../lib/types.js";
 
 const bilingualSchema = z.object({ en: z.string().min(1), tr: z.string().min(1) });
 
@@ -82,7 +82,13 @@ const REALISM_DIRECTIVE = [
   "  slight motion blur) rather than smooth, over-rendered CGI-like polish.",
 ].join("\n");
 
-async function buildSharedContext(slot: ContentSlot): Promise<string[]> {
+export interface PlanHints {
+  targetHook: HookCategory;
+  targetGoal: CtaType;
+  isEvergreen: boolean;
+}
+
+async function buildSharedContext(slot: ContentSlot, hints?: PlanHints): Promise<string[]> {
   const growthNotes = await loadGrowthNotes();
   const knowledge = await buildKnowledgeBlock(slot.format);
   const learnings = await loadLearningsPromptBlock();
@@ -117,6 +123,14 @@ async function buildSharedContext(slot: ContentSlot): Promise<string[]> {
     `- \`hookCategory\`: which psychological hook category the caption's FIRST sentence actually uses (one of: ${HOOK_CATEGORIES.join(", ")}).`,
     `- \`ctaType\`: the single CTA you close with (one of: ${CTA_TYPES.join(", ")}).`,
   ];
+  if (hints) {
+    lines.push(
+      "",
+      `Today's content plan targets a '${hints.targetHook}' hook and a '${hints.targetGoal}' CTA for this slot` +
+        `${hints.isEvergreen ? " (replaying a past high-performing recipe)" : ""} — aim for these, but keep` +
+        " self-labeling honest (see above) rather than forcing an unnatural fit.",
+    );
+  }
   if (knowledge) {
     lines.push("", "Instagram playbook (apply these):", knowledge);
   }
@@ -133,10 +147,10 @@ async function buildSharedContext(slot: ContentSlot): Promise<string[]> {
   return lines;
 }
 
-export async function generatePost(slot: ContentSlot): Promise<GeneratedPost> {
+export async function generatePost(slot: ContentSlot, hints?: PlanHints): Promise<GeneratedPost> {
   const ai = new GoogleGenAI({ apiKey: requireEnv("GEMINI_API_KEY") });
   const model = optionalEnv("GEMINI_TEXT_MODEL", "gemini-2.5-flash");
-  const shared = await buildSharedContext(slot);
+  const shared = await buildSharedContext(slot, hints);
 
   if (slot.format === "single") {
     const prompt = [

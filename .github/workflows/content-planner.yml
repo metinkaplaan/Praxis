@@ -1,0 +1,35 @@
+name: content-planner
+
+on:
+  # Weekly top-up of the rolling 30-day content plan (src/planning/) — right
+  # after collect-insights.yml's daily 05:00 UTC run so the freshest learnings
+  # feed the newly-added week. Missing a run just means the next one covers
+  # more ground; entries already planned are never regenerated.
+  schedule:
+    - cron: "0 5 * * 0" # Sunday, 05:00 UTC
+  workflow_dispatch: {}
+
+concurrency:
+  group: content-planner
+  cancel-in-progress: false
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run plan-content
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_PUBLIC_BASE_URL: ${{ secrets.R2_PUBLIC_BASE_URL }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}

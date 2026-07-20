@@ -92,6 +92,8 @@ interface DraftBase {
   hookCategory?: HookCategory;
   ctaType?: CtaType;
   postHourUtc?: number;
+  /** Set when this draft replays a past high-performing "recipe" per the content planner (src/planning/). Informational only — surfaced in the Telegram preview. */
+  evergreenNote?: string;
 }
 
 export type Draft =

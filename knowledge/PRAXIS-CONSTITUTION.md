@@ -36,11 +36,16 @@ bir **Instagram Growth Operating System**'dir.
    birikince devreye girecek
 3. ✅ **Dalga 3.5 — Analiz protokolü (tamamlandı):** operatör-beslemeli
    viral/rakip/trend analizi için somut rubrik (`knowledge/analysis-log.md`)
-4. ⏭️ **Sonraki dalgalar:** İçerik Planlayıcı (30 günlük takvim — spec:
-   tarih|format|konu|hook|gönderi hedefi tablosu + 90 günde bir yeniden
-   kullanılabilir evergreen gönderiler; yeterli gerçek veri birikince
-   anlamlı), analiz ajanlarının derinleştirilmesi, @girlsofmidnight,
-   Reddit tester akışı
+4. 🔄 **Dalga 4 (başladı):**
+   - ✅ **İçerik Planlayıcı (tamamlandı):** 30 günlük takvim
+     (`src/planning/`, haftalık top-up — `content-planner.yml`) — tarih|
+     format|konu|hook|gönderi hedefi tablosu + ~90 günde bir yeniden
+     kullanılabilir evergreen gönderiler. Veri beklemeden şimdi devrede;
+     `learnings.ts` olgunlaştıkça cold-start rotasyonundan epsilon-greedy
+     veri-güdümlü seçime kendiliğinden geçiyor (format-selector.ts'teki
+     desenin aynısı).
+   - ⏭️ Sırada: analiz ajanlarının derinleştirilmesi, @girlsofmidnight,
+     Reddit tester akışı
 
 ## Değişmez Kurallar
 

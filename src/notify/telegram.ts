@@ -27,6 +27,7 @@ function buildPreviewText(draft: Draft): string {
   return [
     `<b>Midnight draft — @${IG_HANDLES[draft.account]} (${draft.format})</b>`,
     `Kategori: ${draft.category} · Yoğunluk: ${draft.intensity} · Pazar: ${draft.market}`,
+    ...(draft.evergreenNote ? [draft.evergreenNote] : []),
     "",
     `🇬🇧 ${draft.caption.en}`,
     "",
