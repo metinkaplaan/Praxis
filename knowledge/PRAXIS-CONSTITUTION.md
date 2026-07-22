@@ -66,6 +66,10 @@ bir **Instagram Growth Operating System**'dir.
    görünüm asla kullanılmaz.
 8. **Fenotip:** görsel/videoda tasvir edilen kadın ve erkek her zaman
    İngiliz fenotipinde (açık ten, tipik İngiliz-Avrupa yüz hatları) görünür.
+9. **Kıyafet/çerçeveleme:** varsayılan stil derin dekolte ve iç giyim/iç
+   giyim-benzeri kıyafettir (bodysuit, bralet, korse) — bu madde 5'teki
+   "asla müstehcen değil" tavanının İÇİNDE kalır: meme ucu/genital bölge
+   gösterimi veya tam çıplaklık asla yok.
 
 ## Operatör-Besleme Protokolü
 
