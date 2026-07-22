@@ -16,7 +16,7 @@ export const MIDNIGHT_BRAND = {
   /** Single-line (line-art) identity: crescent moon + M + kissing couple. */
   visualIdentity:
     "minimal single-line line-art, crescent moon merged with the letter M and a kissing couple silhouette, " +
-    "deep midnight black background, elegant, sensual but tasteful, no text in image",
+    "deep midnight black background, elegant, sensual but tasteful",
   landingUrl: "https://midnight-landing.vercel.app",
   markets: ["EN", "TR", "RU", "ES"] as const,
 } as const;

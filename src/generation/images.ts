@@ -2,8 +2,19 @@ import { GoogleGenAI } from "@google/genai";
 import { optionalEnv, requireEnv } from "../lib/env.js";
 import { logger } from "../lib/logger.js";
 
+/**
+ * No blanket "no text" ban — informational carousel slides (captions.ts)
+ * deliberately describe on-image text for a text-card design. Instead: no
+ * watermarks/logos ever, and no STRAY/incidental text, but if the art
+ * direction above explicitly calls for on-image text, render exactly that,
+ * large and legible.
+ */
 function buildImageDirective(imagePrompt: string): string {
-  return `${imagePrompt}\n\nPortrait 4:5 aspect ratio, high quality, no text or watermarks.`;
+  return (
+    `${imagePrompt}\n\nPortrait 4:5 aspect ratio, high quality, no watermarks or logos. ` +
+    "No stray/incidental text — but if the art direction above explicitly calls for on-image text " +
+    "(e.g. a text-card design with specific wording), render exactly that text, large and perfectly legible."
+  );
 }
 
 /**
