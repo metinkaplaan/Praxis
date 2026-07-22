@@ -64,6 +64,8 @@ bir **Instagram Growth Operating System**'dir.
 7. **Yaş aralığı:** görsel/videoda tasvir edilen herkes her zaman 20-35 yaş
    aralığında görünür — hedef kitlemiz bu yaş grubu, daha yaşlı/olgun bir
    görünüm asla kullanılmaz.
+8. **Fenotip:** görsel/videoda tasvir edilen kadın ve erkek her zaman
+   İngiliz fenotipinde (açık ten, tipik İngiliz-Avrupa yüz hatları) görünür.
 
 ## Operatör-Besleme Protokolü
 
