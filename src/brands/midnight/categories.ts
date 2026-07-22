@@ -17,7 +17,10 @@ export const CATEGORIES: Category[] = [
     },
     visualHint:
       "deep red tones, candlelight, silhouettes, suggestive but fully feed-safe; " +
-      "high-contrast backlit silhouette against a doorway or window works well here",
+      "high-contrast backlit silhouette against a doorway or window works well here; " +
+      "a decadent food-texture moment (chocolate or syrup drizzled slowly down bare legs or " +
+      "shoulders, close-up) is a proven high-share visual — glossy dripping texture against skin " +
+      "reads as indulgent and desire-coded",
   },
   {
     id: "black",
