@@ -82,6 +82,22 @@ const REALISM_DIRECTIVE = [
   "  slight motion blur) rather than smooth, over-rendered CGI-like polish.",
 ].join("\n");
 
+/**
+ * Approved templates for the INFORMATIONAL carousel style (operator-approved
+ * 2026-07-22). Concrete enough to generate from directly, general enough to
+ * cover any theme — the model still picks which one fits tonight's category.
+ */
+const INFORMATIONAL_CAROUSEL_TEMPLATES = [
+  "Pick ONE of these templates (or a close variant of one), whichever fits tonight's theme:",
+  "- Myth vs Reality: each slide names a common belief about relationships/intimacy, then corrects it in one",
+  "  short line. Contrarian/authority tone (e.g. 'Most couples think X. They're wrong.').",
+  "- Signs Checklist: a numbered list of signs pointing at a problem or opportunity (e.g. '5 signs your date",
+  "  nights need a reset') — practical, save-worthy, mild loss-framing per slide.",
+  "- Stat-Driven Facts: each slide states one statistic or claim in an authoritative tone (e.g. '9 in 10",
+  "  couples have never asked this question'), followed by a one-line takeaway. Use plausible/soft ratios,",
+  "  never invented hard numbers that read as fake.",
+].join("\n");
+
 export interface PlanHints {
   targetHook: HookCategory;
   targetGoal: CtaType;
@@ -214,6 +230,9 @@ export async function generatePost(slot: ContentSlot, hints?: PlanHints): Promis
       "   image model can render it legibly; describe the exact wording in the imagePrompt. REALISM_DIRECTIVE",
       "   below does not apply to informational slides (no need for candid framing/film grain on a text card) —",
       "   it applies only if you choose the narrative style.",
+      "",
+      INFORMATIONAL_CAROUSEL_TEMPLATES,
+      "(Only relevant if you chose the INFORMATIONAL style above.)",
       "",
       REALISM_DIRECTIVE,
       "Apply this to EVERY slide's imagePrompt individually, not just the overall series — only if you chose",
