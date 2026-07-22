@@ -74,6 +74,17 @@ export const CATEGORIES: Category[] = [
       "a close, tender gesture (forehead touch, hand on face) in soft warm light reads as " +
       "reconnection rather than posed romance",
   },
+  {
+    id: "turquoise",
+    theme: {
+      en: "sun-soaked getaway intimacy — freedom and playful anticipation on vacation",
+      tr: "güneşli bir kaçamağın yakınlığı — tatilde özgürlük ve oyunbaz beklenti",
+    },
+    visualHint:
+      "turquoise ocean tones, golden sunlight, tropical beach setting (palms, sand, surfboards); " +
+      "a bikini-clad figure in a candid vacation moment (looking out at the water, walking along " +
+      "the shore, adjusting hair) reads as free and alluring without needing a posed shot",
+  },
 ];
 
 export const INTENSITIES = [
