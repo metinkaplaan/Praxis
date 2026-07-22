@@ -47,6 +47,58 @@ Rakip hesap analizlerinde tabloya ek olarak şu boşluk soruları da cevaplanır
 
 <!-- Yeni analizler buraya, en üstte, yukarıdaki formatla eklenir. -->
 
+## [2026-07-22] Rakip hesap — @scratch.moment.feels (doğrudan rakip app)
+
+**Kaynak:** ekran görüntüleri, kullanıcı tarafından paylaşıldı (bir reel'in kare kare akışı — gerçek kullanıcı (UGC) telefonunda "scratch to reveal a love challenge" mekaniğini kullanırken çekilmiş)
+
+| Kriter | Puan (1-10) | Not |
+|---|---|---|
+| Hook (ilk 3sn) | 7 | Birinci şahıs sonuç-anlatımı: "My boyfriend pulled me closer after this 😈" — özellik değil, SONUÇ vaat ediyor |
+| Tempo | 6 | Yavaş, doğal UGC temposu — kesme yok, tek çekim gibi akıyor |
+| Kurgu | 6 | Selfie reaksiyonu → telefon ekranına kesme (uygulama arayüzü gösterimi) → geri reaksiyon |
+| Altyazı | 7 | Ekranda gömülü metin ("My boyfriend pulled me closer after this"), sade, okunaklı |
+| Görsel kalite | 5 | Amatör/gerçek çekim — parlak/stüdyo değil, tam tersi bir güven sinyali (otantiklik) |
+| Ses kalitesi | — | Orijinal ses, değerlendirilemedi |
+| CTA | — | Görünmüyor (muhtemelen bio linki) |
+| Tahmini izlenme oranı | 6 | Orta — UGC otantikliği ilgi çekiyor ama üretim değeri düşük |
+| Tahmini viral potansiyel | 5 | 26 beğeni ile mütevazı, ama DOĞRUDAN rakip niş için değerli bir referans |
+
+**Rakip boşluk analizi:**
+- Rakibin gözden kaçırdığı ama kitlenin istediği konular: parlak/prodüksiyonlu görsel kalite — rakip tamamen ham UGC'ye yaslanmış, hiç "aspirational" görsel içerik yok.
+- Kullanmadığı içerik formatları: carousel (bulduğumuz örnekte hiç yok), eğitici/bilgi içeriği.
+- Kimsenin doldurmadığı niş konumlanması: "hem otantik hem görsel olarak çekici" — Midnight'ın AI-üretimi ama "yakalanmış an" hisli görselleri bu ikisinin arasında bir yerde durabilir.
+- Bu hafta paylaşılabilecek somut fikir: mevcut kart-reveal reel yapımıza (`reel-structure.md`) rakibin birinci-şahıs sonuç-hook'unu deneyelim (bkz. `hooks.md` eklenen örnek).
+
+**Neden? (en önemli alan):** Bu içeriğin gücü üretim kalitesinden değil **otantiklikten** geliyor — gerçek bir kullanıcının gerçek tepkisi, düşük prodüksiyon değeri güven sinyali olarak çalışıyor. Ayrıca hook "özellik" değil "sonuç" anlatıyor (uygulamanın ne yaptığını değil, kullanınca ne olduğunu). Bu iki şey PRAXIS'in AI-üretimi pipeline'ında tam olarak kopyalanamaz (gerçek kullanıcı görüntümüz yok) ama hook stili doğrudan uyarlanabilir.
+
+**Midnight'a uyarlanan çıkarım:** (a) Birinci şahıs sonuç-anlatımı hook stili `hooks.md`'nin "story" kategorisine Midnight-uyarlı örnek olarak eklendi; (b) uygulama arayüzünü ekranda gösterme fikri `reel-structure.md`'ye teknik kısıtla (Veo metin/arayüz render edemiyor) birlikte arşiv notu olarak düşüldü — şimdilik uygulanamaz; (c) UGC-otantiklik boşluğu ve buna karşı REALISM_DIRECTIVE'in "yakalanmış an" vurgusunu güçlendirme hatırlatması `growth-notes.md`'ye işlendi.
+
+## [2026-07-22] Rakip hesap — @bijnabloot (fiziksel "Couples" oyunu)
+
+**Kaynak:** ekran görüntüleri, kullanıcı tarafından paylaşıldı (bir reel'in kare kare akışı — "Couples" temalı fiziksel Monopoly-parodisi bir oyun satan hesap; 73 beğeni, 11 repost, 35 paylaşım, 22 kaydetme)
+
+| Kriter | Puan (1-10) | Not |
+|---|---|---|
+| Hook (ilk 3sn) | 8 | "Monopoly is boring asf..." — tanıdık bir referansı kalıp-kırıcı şekilde reddediyor, anında merak açıyor |
+| Tempo | 7 | Setup → partnere gönderme → kart reveal, doğal bir ilerleme |
+| Kurgu | 8 | Klasik hook→gerilim→payoff yapısı, `reel-structure.md`'deki şablonla birebir örtüşüyor |
+| Altyazı | 7 | Ekranda gömülü kısa metinler ("Sent this to them 😈", "Monopoly:") — sade, okunaklı |
+| Görsel kalite | 6 | Amatör ama net çekim, ürün (kart) net görünüyor |
+| Ses kalitesi | — | Değerlendirilemedi |
+| CTA | 7 | "grab yours before it sells out" — kıtlık/aciliyet çerçevesi, bio linkine yönlendiriyor |
+| Tahmini izlenme oranı | 8 | Paylaşım(35)+kaydetme(22) toplamı beğeniden(73) oransal olarak çok yüksek — güçlü "partnere gönder" sinyali |
+| Tahmini viral potansiyel | 7 | Niş (fiziksel oyun) ama kanıtlanmış bir format |
+
+**Rakip boşluk analizi:**
+- Rakibin gözden kaçırdığı ama kitlenin istediği konular: dijital/anında erişim — fiziksel ürün "sold out" olabiliyor, uygulama olamaz (Midnight'ın yapısal avantajı).
+- Kullanmadığı içerik formatları: carousel, çok-parçalı seri içerik.
+- Kimsenin doldurmadığı niş konumlanması: "asla tükenmeyen, anında oynanabilen" — Midnight bunu zaten sağlıyor, mesajlaşmada vurgulanabilir.
+- Bu hafta paylaşılabilecek somut fikir: aynı "kart reveal" yapısını, "hiç tükenmez, hemen indir" çerçevesiyle dene.
+
+**Neden? (en önemli alan):** Paylaşım/kaydetme oranının beğeniden yüksek olması, tam olarak `algorithm.md`'nin öne çıkardığı save/share önceliğinin gerçek dünyada işlediğinin kanıtı — bu bizim stratejimizi doğruluyor, değiştirmiyor. "Partnere gönder" davranışını tetikleyen şey, kartın *partner hakkında bir şey ortaya çıkarması* (ilişkiyle ilgili paylaşılabilir bir "biz böyleyiz" anı) — Midnight'ın `send_to_partner` CTA'sı zaten bu mantığa dayanıyor.
+
+**Midnight'a uyarlanan çıkarım:** Yeni bir kural gerekmedi — mevcut reel yapısı ve save/share önceliklendirme stratejisi bu örnekle doğrulandı, referans olarak kayda geçirildi.
+
 ## [2026-07-17] Trend gözlemi — chatplace.tr "AI prompt reçeteleri" carousel'i (9 slayt, 2-8 elimizde)
 
 **Kaynak:** ekran görüntüleri, kullanıcı tarafından paylaşıldı (chatplace.tr hesabının carousel'i; her slayt, Instagram büyümesi için bir AI-prompt şablonu — hesap kendi AI servisini satıyor, CTA'sı yorum-kapılı "SERVİS yaz")

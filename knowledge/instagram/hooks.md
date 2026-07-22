@@ -82,6 +82,8 @@
 - "Two years together. One question we'd never asked. Last night we finally did."
 - "He thought he'd win. He didn't know the game has no winners — only confessions."
 - "The night began with 'this is silly' and ended with 'why didn't we do this sooner?'"
+- "My partner pulled me closer after this card. Didn't see that coming."
+- "One card in, and he already looked at me differently."
 
 ## numbers — Sayılar
 

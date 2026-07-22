@@ -36,3 +36,17 @@
 ## Kapak / İlk Kare
 
 - İlk kare grid'de kapak olur — tek başına anlamlı ve merak uyandırıcı olmalı (videoPrompt'ta ilk kareyi tarif et).
+
+## Rakipte Görülen: Ürünü Ekranda Gösterme (şimdilik uygulanamaz)
+
+> Kaynak: operatör-beslemeli rakip analizi, 2026-07-22 (`analysis-log.md`).
+
+Doğrudan rakip `@scratch.moment.feels`, uygulamasının "scratch to reveal"
+mekaniğini reel içinde telefon ekranında göstererek anlatıyor — ürünü
+tarif etmek yerine kullanımda gösteriyor. Bu güçlü bir teknik ama **şu an
+PRAXIS'in Veo pipeline'ıyla uygulanamaz**: video-üretim modelleri ekrandaki
+metni/arayüzü güvenilir şekilde render edemiyor, "telefon ekranında
+Midnight arayüzünü göster" talimatı büyük ihtimalle bozuk/okunaksız bir
+görüntü üretir. Gerçek ekran kaydı (screen recording) mümkün hale gelirse
+(ör. gerçek bir kullanıcı testi/operatör kaydı) bu format tekrar
+değerlendirilmeli — o zamana kadar sadece arşiv notu.
